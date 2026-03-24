@@ -3,26 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Litj — Frontend × AI Builder</title>
+  <title>Litj — Frontend & AI Portfolio</title>
   <meta name="description" content="Litj 的个人博客 / 作品主页，聚焦前端开发、AI 应用开发、自动化系统与独立项目落地。" />
-  <meta name="theme-color" content="#070b17" />
+  <meta name="theme-color" content="#f3f6fb" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #050816;
-      --bg-soft: #0a1024;
-      --panel: rgba(10, 16, 36, 0.72);
-      --panel-2: rgba(14, 23, 48, 0.82);
-      --text: #ecf5ff;
-      --muted: #9cb5d1;
-      --line: rgba(255,255,255,0.08);
-      --blue: #62b8ff;
-      --violet: #9c7bff;
-      --green: #69f0b2;
-      --pink: #ff6fb5;
-      --shadow: 0 20px 80px rgba(0,0,0,.35);
+      --bg: #eef3f9;
+      --bg-2: #f8fbff;
+      --card: rgba(255,255,255,0.68);
+      --card-strong: rgba(255,255,255,0.82);
+      --line: rgba(15, 23, 42, 0.08);
+      --text: #0f172a;
+      --muted: #5b6b83;
+      --blue: #0a84ff;
+      --blue-soft: #5ac8fa;
+      --violet: #7c5cff;
+      --green: #30d158;
+      --pink: #ff6482;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+      --radius-xl: 30px;
+      --radius-lg: 24px;
+      --radius-md: 18px;
       --max: 1180px;
     }
 
@@ -30,87 +34,137 @@
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+      font-family: Inter, "PingFang SC", "SF Pro Display", "Microsoft YaHei", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at 10% 10%, rgba(98,184,255,.16), transparent 28%),
-        radial-gradient(circle at 90% 20%, rgba(156,123,255,.16), transparent 24%),
-        radial-gradient(circle at 50% 100%, rgba(105,240,178,.12), transparent 28%),
-        linear-gradient(180deg, #040713 0%, #060b1a 40%, #071122 100%);
+        radial-gradient(circle at top left, rgba(90,200,250,.22), transparent 26%),
+        radial-gradient(circle at 85% 12%, rgba(124,92,255,.16), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(48,209,88,.12), transparent 24%),
+        linear-gradient(180deg, var(--bg-2), var(--bg));
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
 
-    .noise, .glow {
+    ::selection {
+      background: rgba(10,132,255,.18);
+    }
+
+    .ambient {
       position: fixed;
       inset: 0;
       pointer-events: none;
       z-index: 0;
+      overflow: hidden;
     }
 
-    .noise {
-      opacity: 0.05;
-      background-image:
-        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size: 26px 26px;
-      mask-image: radial-gradient(circle at center, black, transparent 85%);
-    }
-
-    .glow::before,
-    .glow::after {
+    .ambient::before,
+    .ambient::after {
       content: "";
       position: absolute;
-      width: 42vw;
-      height: 42vw;
+      border-radius: 50%;
       filter: blur(80px);
-      border-radius: 999px;
-      opacity: 0.18;
+      opacity: .36;
+      will-change: transform;
+      transform: translateZ(0);
     }
 
-    .glow::before {
-      top: -10vw;
+    .ambient::before {
+      width: 34vw;
+      height: 34vw;
       left: -6vw;
-      background: var(--blue);
-      animation: drift 12s ease-in-out infinite alternate;
+      top: -10vh;
+      background: rgba(90,200,250,.46);
+      animation: floatA 16s ease-in-out infinite alternate;
     }
 
-    .glow::after {
+    .ambient::after {
+      width: 30vw;
+      height: 30vw;
       right: -8vw;
-      top: 18vh;
-      background: var(--violet);
-      animation: drift 14s ease-in-out infinite alternate-reverse;
+      top: 12vh;
+      background: rgba(124,92,255,.28);
+      animation: floatB 18s ease-in-out infinite alternate;
     }
 
-    @keyframes drift {
+    @keyframes floatA {
       from { transform: translate3d(0,0,0) scale(1); }
-      to { transform: translate3d(30px, -20px, 0) scale(1.08); }
+      to { transform: translate3d(28px, 16px, 0) scale(1.08); }
+    }
+
+    @keyframes floatB {
+      from { transform: translate3d(0,0,0) scale(1); }
+      to { transform: translate3d(-22px, 26px, 0) scale(1.12); }
+    }
+
+    .grid-noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.16) 1px, transparent 1px);
+      background-size: 34px 34px;
+      opacity: .2;
+      mask-image: radial-gradient(circle at center, black, transparent 86%);
+    }
+
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0;
+      z-index: 50;
+      background: linear-gradient(90deg, var(--blue), var(--violet), var(--pink));
+      box-shadow: 0 0 18px rgba(10,132,255,.45);
+      transform-origin: left center;
+    }
+
+    .cursor-glow {
+      position: fixed;
+      width: 180px;
+      height: 180px;
+      margin-left: -90px;
+      margin-top: -90px;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 1;
+      background: radial-gradient(circle, rgba(10,132,255,.12), transparent 70%);
+      transition: transform .12s linear;
+      mix-blend-mode: plus-lighter;
     }
 
     .wrap {
       position: relative;
-      z-index: 1;
-      width: min(var(--max), calc(100% - 32px));
+      z-index: 2;
+      width: min(var(--max), calc(100% - 28px));
       margin: 0 auto;
+    }
+
+    .glass {
+      background: var(--card);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      border: 1px solid rgba(255,255,255,.54);
+      box-shadow: var(--shadow);
     }
 
     .nav {
       position: sticky;
       top: 16px;
-      z-index: 20;
-      margin-top: 16px;
-      backdrop-filter: blur(16px);
-      background: rgba(7, 11, 23, 0.55);
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      box-shadow: var(--shadow);
+      z-index: 30;
+      margin-top: 14px;
+      border-radius: 22px;
     }
 
     .nav-inner {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       padding: 14px 18px;
-      gap: 16px;
+      gap: 14px;
       flex-wrap: wrap;
     }
 
@@ -118,62 +172,68 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      font-weight: 800;
-      letter-spacing: .4px;
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: .2px;
     }
 
-    .brand-mark {
+    .brand-icon {
       width: 38px;
       height: 38px;
+      border-radius: 14px;
       display: grid;
       place-items: center;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--blue), var(--violet));
-      color: #04111f;
-      box-shadow: 0 10px 30px rgba(98,184,255,.25);
+      background: linear-gradient(135deg, #fff, rgba(255,255,255,.68));
+      color: var(--blue);
+      border: 1px solid rgba(255,255,255,.6);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
+      font-weight: 800;
     }
 
     .nav-links {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    .nav a {
-      color: var(--muted);
+    .nav-links a {
       text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
       padding: 10px 14px;
       border-radius: 999px;
-      transition: .2s ease;
-      font-size: 14px;
+      transition: background .25s ease, color .25s ease, transform .25s ease;
     }
 
-    .nav a:hover {
+    .nav-links a:hover {
+      background: rgba(255,255,255,.62);
       color: var(--text);
-      background: rgba(255,255,255,.06);
+      transform: translateY(-1px);
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 22px;
-      padding: 52px 0 28px;
+      grid-template-columns: 1.16fr .84fr;
+      gap: 18px;
+      padding: 34px 0 20px;
       align-items: stretch;
     }
 
-    .card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+    .hero-main,
+    .hero-side-card,
+    .section,
+    .project-card,
+    .post-card,
+    .cta {
+      border-radius: var(--radius-xl);
     }
 
     .hero-main {
-      padding: 34px;
       position: relative;
       overflow: hidden;
-      min-height: 520px;
+      min-height: 470px;
+      padding: 28px;
     }
 
     .hero-main::before {
@@ -181,51 +241,62 @@
       position: absolute;
       inset: 0;
       background:
-        radial-gradient(circle at top right, rgba(98,184,255,.18), transparent 26%),
-        radial-gradient(circle at bottom left, rgba(156,123,255,.14), transparent 30%);
+        linear-gradient(180deg, rgba(255,255,255,.24), transparent 34%),
+        radial-gradient(circle at 15% 10%, rgba(10,132,255,.14), transparent 26%),
+        radial-gradient(circle at 85% 15%, rgba(124,92,255,.12), transparent 24%);
       pointer-events: none;
     }
 
     .eyebrow {
+      position: relative;
+      z-index: 1;
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 10px 14px;
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.1);
-      background: rgba(255,255,255,.04);
-      color: #d7e8fb;
-      font-size: 13px;
-      margin-bottom: 18px;
+      background: rgba(255,255,255,.58);
+      border: 1px solid rgba(255,255,255,.66);
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
     }
 
     .hero h1 {
-      margin: 0;
-      font-size: clamp(42px, 7vw, 82px);
-      line-height: .95;
-      letter-spacing: -2px;
+      position: relative;
+      z-index: 1;
+      margin: 16px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.02;
+      letter-spacing: -1.4px;
+      max-width: 760px;
     }
 
-    .gradient-text {
-      background: linear-gradient(135deg, #ffffff 0%, #8ccfff 35%, #79f0c7 65%, #b389ff 100%);
+    .hero h1 .shine {
+      background: linear-gradient(135deg, #0f172a 0%, #0a84ff 38%, #6e5cff 72%, #0f172a 100%);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
 
     .hero p {
-      margin: 20px 0 0;
+      position: relative;
+      z-index: 1;
+      margin: 18px 0 0;
+      max-width: 670px;
+      font-size: 15px;
+      line-height: 1.9;
       color: var(--muted);
-      font-size: 17px;
-      line-height: 1.8;
-      max-width: 680px;
     }
 
     .hero-actions {
+      position: relative;
+      z-index: 1;
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
-      margin-top: 28px;
+      margin-top: 24px;
     }
 
     .btn {
@@ -233,240 +304,279 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
+      border-radius: 18px;
+      padding: 13px 16px;
       text-decoration: none;
-      border-radius: 16px;
-      padding: 14px 18px;
+      font-size: 14px;
       font-weight: 700;
-      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, background .25s ease;
+      will-change: transform;
     }
 
     .btn:hover {
-      transform: translateY(-2px);
+      transform: translate3d(0,-3px,0) scale(1.01);
     }
 
     .btn-primary {
+      color: white;
       background: linear-gradient(135deg, var(--blue), var(--violet));
-      color: #04111f;
-      box-shadow: 0 12px 28px rgba(98,184,255,.22);
+      box-shadow: 0 16px 32px rgba(10,132,255,.22);
     }
 
     .btn-secondary {
-      background: rgba(255,255,255,.06);
       color: var(--text);
-      border: 1px solid var(--line);
+      background: rgba(255,255,255,.68);
+      border: 1px solid rgba(255,255,255,.72);
     }
 
-    .hero-grid {
+    .hero-metrics {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 28px;
+      margin-top: 22px;
     }
 
-    .hero-stat {
+    .metric {
       padding: 18px;
-      border-radius: 20px;
-      background: rgba(255,255,255,.04);
-      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.44);
+      border: 1px solid rgba(255,255,255,.6);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
+      transform: translateZ(0);
     }
 
-    .hero-stat .num {
-      font-size: 28px;
-      font-weight: 800;
+    .metric strong {
+      display: block;
+      font-size: 24px;
       margin-bottom: 6px;
     }
 
-    .hero-stat .label {
+    .metric span {
+      display: block;
+      font-size: 12px;
+      line-height: 1.6;
       color: var(--muted);
-      font-size: 13px;
-      line-height: 1.5;
     }
 
     .hero-side {
       display: grid;
-      gap: 20px;
+      gap: 18px;
     }
 
-    .mini-card {
-      padding: 24px;
+    .hero-side-card {
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .mini-card h3,
+    .hero-side-card::after {
+      content: "";
+      position: absolute;
+      inset: auto -15% -55% auto;
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(10,132,255,.13), transparent 66%);
+      pointer-events: none;
+    }
+
+    .hero-side-card h3,
     .section h2,
     .project-card h3,
-    .post h3 {
-      margin: 0 0 12px;
-      font-size: 20px;
+    .post-card h3,
+    .cta h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+      letter-spacing: -.3px;
     }
 
-    .mini-card p,
+    .hero-side-card p,
     .section p,
-    .post p,
-    .project-card p {
+    .project-card p,
+    .post-card p,
+    .section-head p,
+    .cta p {
       margin: 0;
       color: var(--muted);
-      line-height: 1.75;
+      line-height: 1.85;
+      font-size: 14px;
     }
 
-    .stack {
+    .chip-wrap,
+    .tag-row {
       display: flex;
       flex-wrap: wrap;
       gap: 10px;
       margin-top: 14px;
     }
 
-    .chip {
+    .chip,
+    .tag {
       padding: 10px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid var(--line);
-      font-size: 13px;
-      color: #dce9f8;
+      font-size: 12px;
+      font-weight: 600;
+      background: rgba(255,255,255,.6);
+      border: 1px solid rgba(255,255,255,.74);
+      color: #314157;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.68);
     }
 
-    section.block {
-      padding: 18px 0 8px;
+    .section-block {
+      padding: 12px 0 10px;
     }
 
     .section-head {
       display: flex;
       justify-content: space-between;
       align-items: end;
-      gap: 14px;
-      margin-bottom: 18px;
+      gap: 18px;
       flex-wrap: wrap;
+      margin-bottom: 16px;
     }
 
     .section-head h2 {
       margin: 0;
-      font-size: clamp(28px, 4vw, 42px);
-      letter-spacing: -1px;
+      font-size: clamp(24px, 3vw, 38px);
+      letter-spacing: -.9px;
     }
 
-    .section-head p {
-      color: var(--muted);
-      max-width: 560px;
-      margin: 0;
-      line-height: 1.7;
+    .grid-2,
+    .project-grid,
+    .post-grid {
+      display: grid;
+      gap: 18px;
     }
 
     .grid-2 {
-      display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 18px;
+    }
+
+    .project-grid,
+    .post-grid {
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .section,
     .project-card,
-    .post {
-      padding: 24px;
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 24px;
-      box-shadow: var(--shadow);
+    .post-card,
+    .cta {
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .bullet-list {
+    .hover-lift {
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
+      will-change: transform;
+      transform: translateZ(0);
+    }
+
+    .hover-lift:hover {
+      transform: translate3d(0,-8px,0);
+      box-shadow: 0 30px 80px rgba(15,23,42,.14);
+    }
+
+    .section::before,
+    .project-card::before,
+    .post-card::before,
+    .cta::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.18), transparent 34%);
+      pointer-events: none;
+    }
+
+    .list {
       display: grid;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 14px;
     }
 
-    .bullet {
+    .item {
       display: grid;
       grid-template-columns: 12px 1fr;
       gap: 12px;
       align-items: start;
     }
 
-    .dot {
+    .item-dot {
       width: 12px;
       height: 12px;
-      border-radius: 999px;
-      margin-top: 6px;
-      background: linear-gradient(135deg, var(--green), var(--blue));
-      box-shadow: 0 0 18px rgba(105,240,178,.35);
+      border-radius: 50%;
+      margin-top: 5px;
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      box-shadow: 0 0 18px rgba(10,132,255,.25);
     }
 
-    .project-grid,
-    .post-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
+    .item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
     }
 
-    .project-card {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .project-card::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 40%);
-      pointer-events: none;
-    }
-
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
-
-    .tag {
-      font-size: 12px;
-      padding: 8px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid var(--line);
-      color: #d8e7f7;
-    }
-
-    .post {
-      min-height: 100%;
+    .item span {
+      color: var(--muted);
+      line-height: 1.8;
+      font-size: 14px;
     }
 
     .post-meta {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 10px;
+      font-size: 11px;
+      letter-spacing: .9px;
       text-transform: uppercase;
-      letter-spacing: 1px;
+      color: #72839b;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .hero-orb {
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      width: 130px;
+      height: 130px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.88), rgba(255,255,255,.1) 42%, rgba(10,132,255,.18) 74%, rgba(124,92,255,.25));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85),
+        0 20px 48px rgba(10,132,255,.18);
+      animation: orbFloat 8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes orbFloat {
+      0%, 100% { transform: translate3d(0,0,0) scale(1); }
+      50% { transform: translate3d(0,-10px,0) scale(1.03); }
     }
 
     .cta {
-      padding: 34px;
       margin: 26px 0 56px;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(98,184,255,.16), transparent 25%),
-        radial-gradient(circle at 80% 80%, rgba(255,111,181,.14), transparent 25%),
-        var(--panel-2);
-      border: 1px solid var(--line);
-      border-radius: 30px;
-      box-shadow: var(--shadow);
       text-align: center;
-    }
-
-    .cta h2 {
-      margin: 0 0 12px;
-      font-size: clamp(28px, 4vw, 46px);
-      letter-spacing: -1px;
-    }
-
-    .cta p {
-      margin: 0 auto 22px;
-      max-width: 720px;
-      color: var(--muted);
-      line-height: 1.8;
+      background: rgba(255,255,255,.76);
     }
 
     footer {
-      color: var(--muted);
       text-align: center;
-      padding: 0 0 40px;
-      font-size: 14px;
+      color: var(--muted);
+      padding: 0 0 36px;
+      font-size: 13px;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0) scale(.985);
+      transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
+      will-change: transform, opacity;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translate3d(0, 0, 0) scale(1);
     }
 
     @media (max-width: 1080px) {
@@ -478,37 +588,47 @@
       }
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 720px) {
+      .wrap {
+        width: min(var(--max), calc(100% - 18px));
+      }
+
       .hero-main,
-      .mini-card,
+      .hero-side-card,
       .section,
       .project-card,
-      .post,
+      .post-card,
       .cta {
-        padding: 20px;
+        padding: 18px;
         border-radius: 22px;
       }
 
-      .hero-grid {
+      .hero h1 {
+        font-size: clamp(28px, 11vw, 42px);
+      }
+
+      .hero-metrics {
         grid-template-columns: 1fr;
       }
 
-      .nav-inner {
-        justify-content: center;
+      .cursor-glow {
+        display: none;
       }
     }
   </style>
 </head>
 <body>
-  <div class="noise"></div>
-  <div class="glow"></div>
+  <div class="ambient"></div>
+  <div class="grid-noise"></div>
+  <div class="progress" id="progress"></div>
+  <div class="cursor-glow" id="cursorGlow"></div>
 
   <div class="wrap">
-    <nav class="nav">
+    <nav class="nav glass reveal">
       <div class="nav-inner">
         <div class="brand">
-          <div class="brand-mark">L</div>
-          <div>Litj / Frontend × AI Builder</div>
+          <div class="brand-icon">L</div>
+          <div>Litj / Frontend & AI Portfolio</div>
         </div>
         <div class="nav-links">
           <a href="#about">关于</a>
@@ -520,92 +640,93 @@
     </nav>
 
     <header class="hero">
-      <section class="hero-main card">
-        <div class="eyebrow">⚡ 独立落地 · 自动化 · 前端体验 · AI 工具整合</div>
+      <section class="hero-main glass reveal hover-lift" data-tilt>
+        <div class="eyebrow">Apple-like polish · Frontend craft · AI workflow building</div>
         <h1>
-          我做的是<br />
-          <span class="gradient-text">能上线、能跑、能带来结果</span><br />
-          的数字产品。
+          我做的不只是页面，<br />
+          而是把 <span class="shine">体验、AI、自动化</span><br />
+          一起变成能上线的产品。
         </h1>
         <p>
           我是 <strong>Litj</strong>，方向聚焦在 <strong>前端开发</strong> 与 <strong>AI 应用开发</strong>。
-          我喜欢把复杂流程拆成可执行系统：从交互界面、自动化工作流，到 AI 工具整合与独立项目落地，重点不是“概念很酷”，而是<strong>真正做出来并跑起来</strong>。
+          我擅长把界面表现、工具整合、自动化流程和真实部署串成一个完整闭环——不仅“能做”，而且“能交付、能展示、能留下印象”。
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects">看项目</a>
-          <a class="btn btn-secondary" href="#contact">联系我</a>
+          <a class="btn btn-primary magnetic" href="#projects">查看项目</a>
+          <a class="btn btn-secondary magnetic" href="#contact">联系我</a>
         </div>
-        <div class="hero-grid">
-          <div class="hero-stat">
-            <div class="num">Frontend</div>
-            <div class="label">重视视觉表现、交互细节与可发布的完整页面体验。</div>
+        <div class="hero-metrics">
+          <div class="metric">
+            <strong>Frontend</strong>
+            <span>关注留白、层级、滚动体验、交互反馈与细节完成度。</span>
           </div>
-          <div class="hero-stat">
-            <div class="num">AI Apps</div>
-            <div class="label">擅长把模型、自动化、脚本与业务流程整合成可用工具。</div>
+          <div class="metric">
+            <strong>AI Apps</strong>
+            <span>擅长把模型能力接到真实业务流程，而不是停留在 demo 层。</span>
           </div>
-          <div class="hero-stat">
-            <div class="num">0 → 1</div>
-            <div class="label">偏好独立推进，从想法、实现到部署上线形成闭环。</div>
+          <div class="metric">
+            <strong>Shipping</strong>
+            <span>偏好独立推进，从想法、实现到部署上线形成完整结果。</span>
           </div>
         </div>
+        <div class="hero-orb"></div>
       </section>
 
       <div class="hero-side">
-        <section class="mini-card card">
-          <h3>核心标签</h3>
-          <div class="stack">
+        <section class="hero-side-card glass reveal hover-lift" data-tilt>
+          <h3>核心优势</h3>
+          <div class="chip-wrap">
             <span class="chip">前端开发</span>
-            <span class="chip">AI 应用开发</span>
-            <span class="chip">自动化系统</span>
-            <span class="chip">工作流整合</span>
+            <span class="chip">AI 工具整合</span>
+            <span class="chip">自动化项目</span>
             <span class="chip">独立项目落地</span>
-            <span class="chip">GitHub / Deploy</span>
+            <span class="chip">视觉表达</span>
+            <span class="chip">发布部署</span>
           </div>
         </section>
-        <section class="mini-card card">
-          <h3>我的价值</h3>
+        <section class="hero-side-card glass reveal hover-lift" data-tilt>
+          <h3>我想传达的价值</h3>
           <p>
-            我不仅会写页面，还会把页面后面的流程接起来；不仅会接 AI，还会把它变成一个能持续使用的工具。对面试官来说，这比“会几个技术名词”更有说服力。
+            我不是只停留在某一层技术的人。相比“会什么框架”，我更想让人看到：我能把一个概念推进成一个可运行、可上线、可被使用的数字产品。
           </p>
         </section>
       </div>
     </header>
 
-    <section class="block" id="about">
-      <div class="section-head">
+    <section class="section-block" id="about">
+      <div class="section-head reveal">
         <h2>关于我</h2>
-        <p>我更像一个把前端能力、自动化思维和 AI 工具串起来的 Builder，而不是只写某一层代码的人。</p>
+        <p>我更像一个把前端能力、自动化思维和 AI 工具接在一起的产品型开发者，而不是只负责某个局部模块的人。</p>
       </div>
       <div class="grid-2">
-        <article class="section">
+        <article class="section glass reveal hover-lift" data-tilt>
           <h2>我擅长的事情</h2>
-          <div class="bullet-list">
-            <div class="bullet"><div class="dot"></div><div><strong>把需求做成可交付界面</strong><br /><span style="color:var(--muted)">从静态页面到高表现力的交互型作品，注重视觉完成度和可展示性。</span></div></div>
-            <div class="bullet"><div class="dot"></div><div><strong>把 AI 接进真实流程</strong><br /><span style="color:var(--muted)">不是停留在调用模型，而是把生成、编辑、自动化、部署串成完整链路。</span></div></div>
-            <div class="bullet"><div class="dot"></div><div><strong>把复杂操作自动化</strong><br /><span style="color:var(--muted)">适合把重复劳动收敛成脚本、工具或小系统，提高效率和稳定性。</span></div></div>
+          <div class="list">
+            <div class="item"><div class="item-dot"></div><div><strong>把需求做成高完成度界面</strong><span>不仅能搭页面，也会关注视觉节奏、交互反馈、动画质感和整体展示效果。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>把 AI 接进真实工具链</strong><span>更偏向把模型能力接到文件、工作流、脚本和业务动作里，形成真正可用的应用。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>把重复动作系统化</strong><span>我对自动化天然敏感，喜欢把繁琐流程收敛成脚本、工具或可复用能力。</span></div></div>
           </div>
         </article>
-        <article class="section">
-          <h2>我希望被看到的特质</h2>
-          <div class="bullet-list">
-            <div class="bullet"><div class="dot"></div><div><strong>有落地意识</strong><br /><span style="color:var(--muted)">会考虑发布、部署、域名、上线效果，而不是只停在本地 demo。</span></div></div>
-            <div class="bullet"><div class="dot"></div><div><strong>有整合能力</strong><br /><span style="color:var(--muted)">能把前端、脚本、GitHub、自动化和 AI 工具组合成可用成果。</span></div></div>
-            <div class="bullet"><div class="dot"></div><div><strong>能独立推进</strong><br /><span style="color:var(--muted)">从 idea 到成品，我更习惯自己把关键环节打通。</span></div></div>
+        <article class="section glass reveal hover-lift" data-tilt>
+          <h2>我希望被看到的点</h2>
+          <div class="list">
+            <div class="item"><div class="item-dot"></div><div><strong>有审美和完成度</strong><span>我会刻意打磨展示层，让作品在面试和作品集场景里更有记忆点。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>有整合和落地能力</strong><span>能把前端、GitHub、自动化、部署和 AI 整成一条完整链路，而不是碎片化能力。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>能独立推进</strong><span>我习惯从 idea、实现、上线到展示都自己打通，保证结果真正落地。</span></div></div>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="block" id="projects">
-      <div class="section-head">
+    <section class="section-block" id="projects">
+      <div class="section-head reveal">
         <h2>精选项目</h2>
-        <p>这些项目不只是“写了什么”，更重要的是它们体现了我的实现路径：快速构建、可视化表达、自动化串联、最终上线。</p>
+        <p>我更偏好那些既能体现技术实现，也能体现交付思维与视觉表达的项目。</p>
       </div>
       <div class="project-grid">
-        <article class="project-card">
+        <article class="project-card glass reveal hover-lift" data-tilt>
           <h3>AI Coding Assistant CLI</h3>
-          <p>从零搭一个本地 coding assistant，支持代码生成、解释、diff/patch、安全局部修改、多文件上下文、自动测试、git diff 总结与 commit message 生成。</p>
+          <p>从零搭建本地 coding assistant，支持代码生成、解释、diff / patch、安全局部修改、多文件上下文、自动测试以及 git 相关辅助能力。</p>
           <div class="tag-row">
             <span class="tag">Python</span>
             <span class="tag">LLM API</span>
@@ -613,93 +734,142 @@
             <span class="tag">CLI</span>
           </div>
         </article>
-        <article class="project-card">
+        <article class="project-card glass reveal hover-lift" data-tilt>
           <h3>HTML Snake Game</h3>
-          <p>一个带霓虹科技风 UI 的单文件小游戏，具备交互、状态管理、速度控制与 GitHub Pages 发布能力，适合作为前端基础表现力展示。</p>
+          <p>独立完成一个高表现力的单文件小游戏，从交互、视觉到 GitHub Pages 发布都可直接展示，体现前端实现与上线能力。</p>
           <div class="tag-row">
             <span class="tag">HTML</span>
             <span class="tag">CSS</span>
             <span class="tag">JavaScript</span>
-            <span class="tag">GitHub Pages</span>
+            <span class="tag">Deploy</span>
           </div>
         </article>
-        <article class="project-card">
+        <article class="project-card glass reveal hover-lift" data-tilt>
           <h3>自动化工作流整合</h3>
-          <p>围绕消息发送、文件处理、脚本执行、工具联动，做过多种自动化方案，把繁琐重复任务压缩成可复用流程。</p>
+          <p>围绕消息、文件、脚本、外部服务做自动化方案，把重复工作压缩成可复用流程，兼顾效率和稳定性。</p>
           <div class="tag-row">
             <span class="tag">Workflow</span>
+            <span class="tag">Integration</span>
             <span class="tag">PowerShell</span>
             <span class="tag">Python</span>
-            <span class="tag">Integration</span>
           </div>
         </article>
       </div>
     </section>
 
-    <section class="block" id="writing">
-      <div class="section-head">
+    <section class="section-block" id="writing">
+      <div class="section-head reveal">
         <h2>博客 / 思考</h2>
-        <p>这个区域既可以当博客，也可以当面试时的“方法论展示区”。我更喜欢写怎么把问题拆开、怎么把工具真正接进场景里。</p>
+        <p>我更喜欢写“怎么把问题拆开并做成系统”——这比单纯列技术栈更能体现思考方式。</p>
       </div>
       <div class="post-grid">
-        <article class="post">
+        <article class="post-card glass reveal hover-lift" data-tilt>
           <div class="post-meta">AI × Workflow</div>
-          <h3>把 AI 真正接进工作流，不只是调用一次 API</h3>
-          <p>好的 AI 应用不是“能回答”，而是能接住上下文、接住文件、接住动作、接住发布流程，然后形成闭环。</p>
+          <h3>把 AI 真正接进工作流，而不是停留在单次调用</h3>
+          <p>真正有价值的 AI 应用，是能接住上下文、接住文件、接住动作和接住发布链路，最后形成完整闭环。</p>
         </article>
-        <article class="post">
+        <article class="post-card glass reveal hover-lift" data-tilt>
           <div class="post-meta">Frontend × Product</div>
-          <h3>一个能加分的前端作品，为什么不能只是把页面做出来</h3>
-          <p>真正让人印象深刻的，往往是体验、视觉、节奏和完成度，而不是技术栈名称本身。</p>
+          <h3>为什么一个前端作品的“感觉”本身就是竞争力</h3>
+          <p>技术栈会被遗忘，但视觉层级、滚动质感、交互细节和完成度，往往更容易让人记住你。</p>
         </article>
-        <article class="post">
-          <div class="post-meta">Independent Building</div>
-          <h3>从 idea 到上线，我更看重的是“最后 20%”</h3>
-          <p>很多作品输在收尾：发布、域名、交互打磨、可访问性、展示路径。把这些做好，才更像真正的项目。</p>
+        <article class="post-card glass reveal hover-lift" data-tilt>
+          <div class="post-meta">Independent Builder</div>
+          <h3>从 idea 到上线，真正拉开差距的是最后 20%</h3>
+          <p>很多项目输在发布、部署、域名、路径、交互打磨和展示方式。把最后这段走完，作品才真正成立。</p>
         </article>
       </div>
     </section>
 
-    <section class="cta" id="contact">
-      <h2>我想做的，不只是功能，<br /><span class="gradient-text">而是能被记住的产品表达。</span></h2>
+    <section class="cta glass reveal hover-lift" id="contact" data-tilt>
+      <h2>如果你在找一个既能做前端体验，<br />又能把 AI 接进真实流程的人。</h2>
       <p>
-        如果你在找一个既能做前端视觉与交互、又能把 AI 和自动化接进真实业务流程的人，欢迎联系我。
-        我擅长把想法快速做成可展示、可部署、可继续迭代的成果。
+        我希望做的不是“看起来很会”，而是“真的把事情做成”。
+        对我来说，优秀的项目应该同时具备视觉表达、工程实现、自动化思维和部署落地能力。
       </p>
       <div class="hero-actions" style="justify-content:center;">
-        <a class="btn btn-primary" href="mailto:625681352@qq.com">发邮件联系我</a>
-        <a class="btn btn-secondary" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="btn btn-primary magnetic" href="mailto:625681352@qq.com">邮件联系我</a>
+        <a class="btn btn-secondary magnetic" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </section>
 
     <footer>
-      © <span id="year"></span> Litj · Built for portfolio, interview impact, and real deployment.
+      © <span id="year"></span> Litj · Crafted for interview impact, portfolio quality, and real deployment.
     </footer>
   </div>
 
   <script>
+    const progress = document.getElementById('progress');
+    const cursorGlow = document.getElementById('cursorGlow');
+    const revealEls = document.querySelectorAll('.reveal');
+    const tiltEls = document.querySelectorAll('[data-tilt]');
+    const magneticEls = document.querySelectorAll('.magnetic');
+
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    const setProgress = () => {
+      const scrollTop = window.scrollY;
+      const height = document.documentElement.scrollHeight - window.innerHeight;
+      const ratio = height <= 0 ? 0 : scrollTop / height;
+      progress.style.width = `${ratio * 100}%`;
+    };
+
+    let ticking = false;
+    const onScroll = () => {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setProgress();
+          ticking = false;
+        });
+        ticking = true;
+      }
+    };
+
+    setProgress();
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          entry.target.animate([
-            { opacity: 0, transform: 'translateY(24px)' },
-            { opacity: 1, transform: 'translateY(0)' }
-          ], {
-            duration: 700,
-            easing: 'cubic-bezier(.2,.65,.2,1)',
-            fill: 'forwards'
-          });
+          entry.target.classList.add('visible');
           observer.unobserve(entry.target);
         }
       });
     }, { threshold: 0.12 });
 
-    document.querySelectorAll('.card, .section, .project-card, .post, .cta').forEach((el) => {
-      el.style.opacity = 0;
-      observer.observe(el);
-    });
+    revealEls.forEach(el => observer.observe(el));
+
+    if (window.matchMedia('(pointer:fine)').matches) {
+      window.addEventListener('pointermove', (e) => {
+        cursorGlow.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      }, { passive: true });
+
+      tiltEls.forEach((card) => {
+        card.addEventListener('pointermove', (e) => {
+          const rect = card.getBoundingClientRect();
+          const px = (e.clientX - rect.left) / rect.width;
+          const py = (e.clientY - rect.top) / rect.height;
+          const rotateY = (px - 0.5) * 8;
+          const rotateX = (0.5 - py) * 8;
+          card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(0,-6px,0)`;
+        });
+        card.addEventListener('pointerleave', () => {
+          card.style.transform = '';
+        });
+      });
+
+      magneticEls.forEach((el) => {
+        el.addEventListener('pointermove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left - rect.width / 2;
+          const y = e.clientY - rect.top - rect.height / 2;
+          el.style.transform = `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
+        });
+        el.addEventListener('pointerleave', () => {
+          el.style.transform = '';
+        });
+      });
+    }
   </script>
 </body>
 </html>
