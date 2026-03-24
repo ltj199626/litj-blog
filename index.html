@@ -3,360 +3,808 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Litj — Frontend & AI Portfolio</title>
-  <meta name="description" content="Litj 的个人博客 / 作品主页，聚焦前端开发、AI 应用开发、自动化项目与独立产品落地。" />
-  <meta name="theme-color" content="#f5f5f7" />
+  <title>Litj — Vue 3 Portfolio & AI Blog</title>
+  <meta name="description" content="Litj 的 Vue 3 多页面作品站，聚焦前端开发、AI 应用开发、自动化项目与教程输出。" />
+  <meta name="theme-color" content="#0b1220" />
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-router@4/dist/vue-router.global.prod.js"></script>
   <style>
     :root {
-      --bg: #f5f5f7;
-      --bg-soft: #fbfbfd;
-      --text: #1d1d1f;
-      --muted: #6e6e73;
-      --line: rgba(0,0,0,.08);
-      --card: rgba(255,255,255,.76);
-      --blue: #0071e3;
-      --blue-soft: #4da3ff;
-      --shadow: 0 20px 60px rgba(0,0,0,.08);
-      --radius-xl: 32px;
-      --max: 1180px;
-      --nav-h: 72px;
+      --bg: #07111f;
+      --bg-soft: #0d1628;
+      --bg-card: rgba(13, 22, 40, 0.68);
+      --bg-card-strong: rgba(17, 28, 48, 0.86);
+      --line: rgba(255,255,255,.08);
+      --text: #edf5ff;
+      --muted: #9ab0cb;
+      --blue: #5db4ff;
+      --blue-2: #2f7cff;
+      --violet: #8c7cff;
+      --green: #52f0b1;
+      --pink: #ff6ca8;
+      --shadow: 0 24px 80px rgba(0,0,0,.3);
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --max: 1220px;
+      --nav-h: 76px;
     }
+
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(77,163,255,.14), transparent 22%),
-        radial-gradient(circle at 100% 0%, rgba(0,113,227,.08), transparent 18%),
-        linear-gradient(180deg, #fafafc 0%, #f2f4f7 100%);
-      font-family: "MiSans", "MiSans Normal", "PingFang SC", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+        radial-gradient(circle at top left, rgba(93,180,255,.15), transparent 25%),
+        radial-gradient(circle at 85% 0%, rgba(140,124,255,.14), transparent 22%),
+        radial-gradient(circle at 50% 100%, rgba(82,240,177,.1), transparent 28%),
+        linear-gradient(180deg, #060d18 0%, #08111e 35%, #0a1323 100%);
+      color: var(--text);
+      font-family: "MiSans", "MiSans Normal", "PingFang SC", "Inter", "Microsoft YaHei", sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       overflow-x: hidden;
     }
-    ::selection { background: rgba(0,113,227,.16); }
+
+    a { color: inherit; }
+    ::selection { background: rgba(93,180,255,.2); }
     ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: rgba(0,0,0,.03); }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,.03); }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, rgba(0,113,227,.42), rgba(77,163,255,.68));
+      background: linear-gradient(180deg, rgba(93,180,255,.55), rgba(47,124,255,.86));
       border-radius: 999px;
-      border: 2px solid rgba(255,255,255,.75);
+      border: 2px solid rgba(9,16,29,.9);
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, rgba(0,113,227,.58), rgba(77,163,255,.86));
+
+    #app { min-height: 100vh; }
+
+    .ambient, .ambient-2 {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      pointer-events: none;
+      z-index: 0;
+      opacity: .22;
+      will-change: transform;
     }
+    .ambient {
+      width: 34vw; height: 34vw; left: -8vw; top: -12vh;
+      background: rgba(93,180,255,.42);
+      animation: floatA 16s ease-in-out infinite alternate;
+    }
+    .ambient-2 {
+      width: 28vw; height: 28vw; right: -10vw; top: 18vh;
+      background: rgba(140,124,255,.28);
+      animation: floatB 18s ease-in-out infinite alternate;
+    }
+    @keyframes floatA { from { transform: translate3d(0,0,0) scale(1); } to { transform: translate3d(24px,14px,0) scale(1.08); } }
+    @keyframes floatB { from { transform: translate3d(0,0,0) scale(1);} to { transform: translate3d(-20px,20px,0) scale(1.08);} }
+
     .progress {
-      position: fixed; top: 0; left: 0; width: 0; height: 3px; z-index: 60;
-      background: linear-gradient(90deg, #0071e3, #5ac8fa);
-      box-shadow: 0 0 16px rgba(0,113,227,.26);
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px; width: 0;
+      z-index: 60;
+      background: linear-gradient(90deg, var(--blue), var(--violet), var(--pink));
+      box-shadow: 0 0 18px rgba(93,180,255,.36);
+      transform-origin: left center;
     }
-    .bg-orb,.bg-orb-2 {
-      position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
-      opacity: .24; will-change: transform; transform: translateZ(0);
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      width: min(var(--max), calc(100% - 28px));
+      margin: 0 auto;
     }
-    .bg-orb {
-      width: 30vw; height: 30vw; left: -6vw; top: -10vh;
-      background: rgba(77,163,255,.45); animation: driftA 16s ease-in-out infinite alternate;
-    }
-    .bg-orb-2 {
-      width: 26vw; height: 26vw; right: -8vw; top: 20vh;
-      background: rgba(0,113,227,.22); animation: driftB 18s ease-in-out infinite alternate;
-    }
-    @keyframes driftA { from { transform: translate3d(0,0,0) scale(1);} to { transform: translate3d(30px,12px,0) scale(1.08);} }
-    @keyframes driftB { from { transform: translate3d(0,0,0) scale(1);} to { transform: translate3d(-26px,20px,0) scale(1.08);} }
-    .wrap { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; position: relative; z-index: 2; }
+
     .glass {
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.85);
-      backdrop-filter: blur(24px) saturate(160%);
-      -webkit-backdrop-filter: blur(24px) saturate(160%);
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,.1);
+      backdrop-filter: blur(22px) saturate(150%);
+      -webkit-backdrop-filter: blur(22px) saturate(150%);
       box-shadow: var(--shadow);
     }
+
     .nav {
-      position: sticky; top: 14px; z-index: 40; margin-top: 14px; border-radius: 24px;
-      transition: transform .45s cubic-bezier(.22,.61,.36,1), background .35s ease;
+      position: sticky;
+      top: 14px;
+      z-index: 40;
+      margin-top: 14px;
+      border-radius: 24px;
     }
     .nav-inner {
-      min-height: var(--nav-h); display: flex; align-items: center; justify-content: space-between;
-      gap: 16px; padding: 12px 18px; flex-wrap: wrap;
+      min-height: var(--nav-h);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 18px;
+      flex-wrap: wrap;
     }
-    .brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .2px;
+      text-decoration: none;
+    }
     .brand-mark {
-      width: 40px; height: 40px; border-radius: 15px; display: grid; place-items: center; color: white;
-      font-weight: 800; background: linear-gradient(135deg, #0071e3, #4da3ff); box-shadow: 0 10px 24px rgba(0,113,227,.22);
+      width: 40px; height: 40px;
+      border-radius: 14px;
+      display: grid; place-items: center;
+      color: #03121e;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      box-shadow: 0 12px 28px rgba(93,180,255,.25);
     }
-    .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
-    .nav-links a {
-      text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 600;
-      padding: 10px 14px; border-radius: 999px; transition: .25s ease;
+    .nav-links {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
     }
-    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.82); }
+    .nav-link {
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: .22s ease;
+    }
+    .nav-link:hover,
+    .nav-link.router-link-active {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+    }
+
+    .page {
+      padding: 28px 0 46px;
+      min-height: calc(100vh - 110px);
+    }
+
     .hero {
-      padding: 40px 0 20px; display: grid; grid-template-columns: 1.18fr .82fr; gap: 18px; align-items: stretch;
+      display: grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+      margin-bottom: 18px;
     }
-    .hero-main,.panel,.project,.post,.cta { border-radius: var(--radius-xl); overflow: hidden; }
+    .hero-main, .hero-side-card, .section, .card, .article-card, .cta {
+      border-radius: 28px;
+      overflow: hidden;
+    }
     .hero-main {
-      min-height: 520px; padding: 34px; position: relative;
-      background: radial-gradient(circle at 10% 10%, rgba(77,163,255,.12), transparent 28%), linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.7));
+      position: relative;
+      padding: 32px;
+      min-height: 500px;
+      background:
+        radial-gradient(circle at 12% 10%, rgba(93,180,255,.16), transparent 26%),
+        radial-gradient(circle at 88% 12%, rgba(140,124,255,.12), transparent 24%),
+        linear-gradient(180deg, rgba(255,255,255,.04), transparent 30%);
     }
-    .hero-label {
-      display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px;
-      background: rgba(255,255,255,.84); border: 1px solid rgba(255,255,255,.96); color: #44556e;
-      font-size: 12px; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,.88);
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #dbe9f7;
+      font-size: 12px;
+      font-weight: 700;
     }
-    .hero h1 {
-      margin: 22px 0 0; max-width: 760px; font-size: clamp(26px, 3.9vw, 42px); line-height: 1.2; letter-spacing: -.9px; font-weight: 800;
+    .hero-title {
+      margin: 18px 0 0;
+      font-size: clamp(28px, 4.4vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -1.2px;
+      max-width: 760px;
     }
-    .hero h1 .accent { color: var(--blue); }
-    .hero-lead { margin: 18px 0 0; max-width: 700px; color: var(--muted); font-size: 15px; line-height: 1.95; }
-    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
+    .hero-title .accent {
+      background: linear-gradient(135deg, #ffffff 0%, #8ecfff 30%, #7af0c2 62%, #aa98ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-desc {
+      margin: 18px 0 0;
+      max-width: 700px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.95;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
     .btn {
-      text-decoration: none; border-radius: 18px; padding: 13px 18px; font-size: 14px; font-weight: 700;
-      display: inline-flex; align-items: center; justify-content: center;
-      transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease, background .3s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 13px 18px;
+      border-radius: 18px;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, background .28s ease;
     }
     .btn:hover { transform: translateY(-2px); }
-    .btn-primary { color: white; background: linear-gradient(135deg, #0071e3, #4da3ff); box-shadow: 0 16px 34px rgba(0,113,227,.2); }
-    .btn-secondary { color: var(--text); background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.92); }
-    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+    .btn-primary {
+      color: #06111d;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      box-shadow: 0 14px 34px rgba(93,180,255,.22);
+    }
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
     .stat {
-      padding: 18px; border-radius: 22px; background: rgba(255,255,255,.66); border: 1px solid rgba(255,255,255,.88);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
     }
-    .stat strong { display: block; font-size: 22px; margin-bottom: 6px; }
-    .stat span { font-size: 12px; line-height: 1.7; color: var(--muted); }
-    .hero-side { display: grid; gap: 18px; }
-    .panel,.section,.project,.post,.cta {
-      padding: 24px; background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
+    .stat strong {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 6px;
+      letter-spacing: -.4px;
     }
-    .panel h3,.section h3,.project h3,.post h3,.cta h2,.section-head h2 { margin: 0 0 10px; letter-spacing: -.4px; }
-    .panel h3,.section h3,.project h3,.post h3 { font-size: 19px; }
-    .panel p,.section p,.project p,.post p,.section-head p,.cta p {
-      margin: 0; font-size: 14px; line-height: 1.9; color: var(--muted);
+    .stat span {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
     }
-    .chips,.tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
-    .chip,.tag {
-      padding: 9px 12px; border-radius: 999px; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.95);
-      font-size: 12px; font-weight: 700; color: #415168;
+
+    .hero-side {
+      display: grid;
+      gap: 18px;
     }
-    .section-block { padding: 14px 0 10px; }
-    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
-    .section-head h2 { margin: 0; font-size: clamp(24px, 3vw, 36px); }
-    .grid-2,.project-grid,.post-grid { display: grid; gap: 18px; }
+    .hero-side-card, .section, .card, .article-card, .cta {
+      padding: 24px;
+    }
+    .hero-side-card h3,
+    .section h3,
+    .card h3,
+    .article-card h3,
+    .cta h2,
+    .section-head h2 {
+      margin: 0 0 10px;
+      letter-spacing: -.4px;
+    }
+    .hero-side-card p,
+    .section p,
+    .card p,
+    .article-card p,
+    .cta p,
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.85;
+      font-size: 14px;
+    }
+
+    .chips, .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    .chip, .tag {
+      padding: 9px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: #d8e7f7;
+    }
+
+    .section-block { margin-top: 16px; }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(24px, 3vw, 38px);
+    }
+
+    .grid-2, .grid-3, .article-grid {
+      display: grid;
+      gap: 18px;
+    }
     .grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .project-grid,.post-grid { grid-template-columns: repeat(3, 1fr); }
-    .lift { transition: transform .45s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease; }
-    .lift:hover { transform: translateY(-6px); box-shadow: 0 26px 70px rgba(0,0,0,.1); }
-    .list { display: grid; gap: 12px; margin-top: 16px; }
-    .item { display: grid; grid-template-columns: 12px 1fr; gap: 12px; align-items: start; }
-    .item-dot {
-      width: 12px; height: 12px; border-radius: 50%; margin-top: 5px; background: linear-gradient(135deg, #0071e3, #5ac8fa);
-      box-shadow: 0 0 12px rgba(0,113,227,.22);
+    .grid-3, .article-grid { grid-template-columns: repeat(3, 1fr); }
+
+    .lift {
+      transition: transform .34s cubic-bezier(.22,.61,.36,1), box-shadow .34s ease;
+      will-change: transform;
     }
-    .item strong { display: block; margin-bottom: 5px; font-size: 15px; }
-    .item span { display: block; color: var(--muted); font-size: 14px; line-height: 1.85; }
-    .post-meta { margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .9px; color: #7a7a82; font-weight: 700; }
-    .cta { margin: 26px 0 56px; text-align: center; }
-    footer { text-align: center; color: var(--muted); padding: 0 0 36px; font-size: 13px; }
-    .reveal { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .85s cubic-bezier(.22,.61,.36,1), transform .85s cubic-bezier(.22,.61,.36,1); }
-    .reveal.visible { opacity: 1; transform: translate3d(0,0,0); }
-    @media (max-width: 1080px) { .hero,.grid-2,.project-grid,.post-grid { grid-template-columns: 1fr; } }
+    .lift:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 30px 80px rgba(0,0,0,.28);
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+      margin-top: 14px;
+    }
+    .list-item {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      margin-top: 6px;
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      box-shadow: 0 0 14px rgba(93,180,255,.28);
+    }
+    .list-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 15px;
+    }
+    .list-item span {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.85;
+    }
+
+    .article-meta {
+      margin-bottom: 8px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #7890ad;
+      font-weight: 700;
+    }
+
+    .timeline {
+      display: grid;
+      gap: 14px;
+    }
+    .timeline-item {
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+    .timeline-item small {
+      display: block;
+      margin-bottom: 6px;
+      color: #8aa3bf;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      font-weight: 700;
+    }
+
+    .cta {
+      margin: 26px 0 56px;
+      text-align: center;
+      background: var(--bg-card-strong);
+    }
+
+    footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 0 0 34px;
+      font-size: 13px;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+      transition: opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1);
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translate3d(0,0,0);
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .grid-2,
+      .grid-3,
+      .article-grid {
+        grid-template-columns: 1fr;
+      }
+    }
     @media (max-width: 720px) {
-      .wrap { width: min(var(--max), calc(100% - 18px)); }
-      .hero-main,.panel,.section,.project,.post,.cta { padding: 18px; border-radius: 22px; }
-      .hero h1 { font-size: clamp(24px, 8vw, 34px); }
-      .hero-stats { grid-template-columns: 1fr; }
+      .shell { width: min(var(--max), calc(100% - 18px)); }
+      .hero-main, .hero-side-card, .section, .card, .article-card, .cta { padding: 18px; border-radius: 22px; }
+      .hero-title { font-size: clamp(24px, 8.5vw, 36px); }
+      .stats { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="progress" id="progress"></div>
-  <div class="bg-orb"></div>
-  <div class="bg-orb-2"></div>
-
-  <div class="wrap">
-    <nav class="nav glass reveal">
-      <div class="nav-inner">
-        <div class="brand">
-          <div class="brand-mark">L</div>
-          <div>Litj / Frontend & AI Portfolio</div>
-        </div>
-        <div class="nav-links">
-          <a href="#about">关于</a>
-          <a href="#projects">项目</a>
-          <a href="#writing">博客</a>
-          <a href="#contact">联系</a>
-        </div>
-      </div>
-    </nav>
-
-    <header class="hero">
-      <section class="hero-main glass reveal">
-        <div class="hero-label">Frontend · AI Apps · Automation · Shipping</div>
-        <h1>
-          我把 <span class="accent">前端体验</span>、<span class="accent">AI 能力</span> 与 <span class="accent">自动化流程</span><br />
-          做成真正可以上线的产品。
-        </h1>
-        <p class="hero-lead">
-          我是 <strong>Litj</strong>，聚焦前端开发与 AI 应用开发。相比“只会做页面”或“只会接模型”，我更关注完整闭环：从界面、交互、工具整合，到部署上线与持续迭代，让作品真正具备展示价值和落地价值。
-        </p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#projects">查看项目</a>
-          <a class="btn btn-secondary" href="#contact">联系我</a>
-        </div>
-        <div class="hero-stats">
-          <div class="stat"><strong>Frontend</strong><span>更重视视觉层级、排版、细节和整体体验完成度。</span></div>
-          <div class="stat"><strong>AI Apps</strong><span>擅长把模型、脚本、文件和工作流接成真正可用的工具。</span></div>
-          <div class="stat"><strong>0 → 1</strong><span>能独立推进，从 idea、实现到部署形成一个完整结果。</span></div>
-        </div>
-      </section>
-
-      <div class="hero-side">
-        <section class="panel glass reveal lift">
-          <h3>核心优势</h3>
-          <div class="chips">
-            <span class="chip">前端开发</span>
-            <span class="chip">AI 工具整合</span>
-            <span class="chip">自动化项目</span>
-            <span class="chip">独立项目落地</span>
-            <span class="chip">视觉表达</span>
-            <span class="chip">发布部署</span>
-          </div>
-        </section>
-        <section class="panel glass reveal lift">
-          <h3>我想体现的价值</h3>
-          <p>我希望别人看到的不是“会几个技术名词”，而是我能把一个想法做成真正可交付、可展示、可上线的数字产品。</p>
-        </section>
-      </div>
-    </header>
-
-    <section class="section-block" id="about">
-      <div class="section-head reveal">
-        <h2>关于我</h2>
-        <p>相比只停留在某一层技术，我更偏向一个把前端、自动化与 AI 工具链真正串起来的 Builder。</p>
-      </div>
-      <div class="grid-2">
-        <article class="section glass reveal lift">
-          <h3>我擅长的事情</h3>
-          <div class="list">
-            <div class="item"><div class="item-dot"></div><div><strong>做高完成度界面</strong><span>重视排版、留白、节奏、滚动质感和交互反馈，而不是只把内容堆上去。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>把 AI 接进真实流程</strong><span>会把模型能力和文件、脚本、工作流、工具系统一起整合，而不是停在单次调用。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>把复杂操作自动化</strong><span>喜欢把繁琐重复的事情收敛成脚本、命令行工具或可持续复用的小系统。</span></div></div>
-          </div>
-        </article>
-        <article class="section glass reveal lift">
-          <h3>我希望被看到的点</h3>
-          <div class="list">
-            <div class="item"><div class="item-dot"></div><div><strong>有审美和表达</strong><span>会刻意打磨作品展示层，让页面和作品集本身就是能力证明。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>有整合和落地能力</strong><span>能把前端、自动化、GitHub、部署和 AI 工具真正拼成一条完整链路。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>能独立推进项目</strong><span>习惯从想法、实现到上线自己推进关键节点，保证结果真正落地。</span></div></div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section-block" id="projects">
-      <div class="section-head reveal">
-        <h2>精选项目</h2>
-        <p>这些项目代表我真正想展示的能力：不仅会做，还会整合、上线并把展示效果做好。</p>
-      </div>
-      <div class="project-grid">
-        <article class="project glass reveal lift">
-          <h3>AI Coding Assistant CLI</h3>
-          <p>从零搭建本地 coding assistant，支持代码生成、解释、diff / patch、安全局部修改、多文件上下文、自动测试以及 git 辅助能力。</p>
-          <div class="tags">
-            <span class="tag">Python</span><span class="tag">LLM API</span><span class="tag">Automation</span><span class="tag">CLI</span>
-          </div>
-        </article>
-        <article class="project glass reveal lift">
-          <h3>HTML Snake Game</h3>
-          <p>独立完成单文件小游戏，从交互、视觉到 GitHub Pages 发布都能直接展示，体现前端实现和上线能力。</p>
-          <div class="tags">
-            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Deploy</span>
-          </div>
-        </article>
-        <article class="project glass reveal lift">
-          <h3>自动化工作流整合</h3>
-          <p>围绕消息、文件、脚本、外部服务做自动化方案，把重复工作压缩成可复用流程，兼顾效率和稳定性。</p>
-          <div class="tags">
-            <span class="tag">Workflow</span><span class="tag">Integration</span><span class="tag">PowerShell</span><span class="tag">Python</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="section-block" id="writing">
-      <div class="section-head reveal">
-        <h2>博客 / 思考</h2>
-        <p>我更喜欢写“如何把一个想法做成真正可运行系统”，而不是只列一串技术关键词。</p>
-      </div>
-      <div class="post-grid">
-        <article class="post glass reveal lift">
-          <div class="post-meta">AI × Workflow</div>
-          <h3>把 AI 真正接进工作流，而不是停留在一次调用</h3>
-          <p>更有价值的 AI 应用，是能接住上下文、文件、动作和发布流程，最后形成一个完整闭环。</p>
-        </article>
-        <article class="post glass reveal lift">
-          <div class="post-meta">Frontend × Product</div>
-          <h3>为什么前端作品的“感觉”本身就是竞争力</h3>
-          <p>真正让人记住你的，往往不是技术名词，而是视觉层级、滚动节奏、交互细节和完成度。</p>
-        </article>
-        <article class="post glass reveal lift">
-          <div class="post-meta">Independent Builder</div>
-          <h3>从 idea 到上线，拉开差距的是最后 20%</h3>
-          <p>很多项目输在发布、部署、域名、路径、展示与收尾。把最后这段走完，作品才真正成立。</p>
-        </article>
-      </div>
-    </section>
-
-    <section class="cta glass reveal" id="contact">
-      <h2>如果你在找一个既能做前端体验，<br />又能把 AI 接进真实流程的人。</h2>
-      <p>我更想做的是“真的把事情做成”，而不是停在概念、截图或半成品层面。</p>
-      <div class="hero-actions" style="justify-content:center;">
-        <a class="btn btn-primary" href="mailto:625681352@qq.com">邮件联系我</a>
-        <a class="btn btn-secondary" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">GitHub</a>
-      </div>
-    </section>
-
-    <footer>
-      © <span id="year"></span> Litj · Crafted for interview impact, portfolio quality, and real deployment.
-    </footer>
-  </div>
+  <div id="app"></div>
 
   <script>
-    const progress = document.getElementById('progress');
-    const revealEls = document.querySelectorAll('.reveal');
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const { createApp, ref, onMounted, watch, nextTick } = Vue;
+    const { createRouter, createWebHashHistory, RouterLink, RouterView } = VueRouter;
 
-    const setProgress = () => {
-      const top = window.scrollY;
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      progress.style.width = `${h <= 0 ? 0 : (top / h) * 100}%`;
+    const articles = [
+      {
+        category: 'AI Tutorial',
+        title: '从 0 到 1 做出可交付的 AI 助手：我的完整方法论',
+        desc: '不是教你怎么调一个 API，而是怎么把 prompt、上下文、文件处理、自动测试和发布流程接成一个完整产品。'
+      },
+      {
+        category: 'Frontend',
+        title: '为什么前端的质感，是最容易被面试官一眼看出来的能力',
+        desc: '层级、字体、留白、滚动、响应式和反馈细节，本身就是工程能力与审美能力的外显。'
+      },
+      {
+        category: 'Automation',
+        title: '自动化的真正价值：不是省几步，而是把流程变成能力资产',
+        desc: '当一个动作能被稳定复用，它就不再只是脚本，而是你的个人生产力基础设施。'
+      }
+    ];
+
+    const projects = [
+      {
+        title: 'AI Coding Assistant CLI',
+        desc: '从零搭建本地 coding assistant，支持生成、解释、patch、安全局部修改、多文件上下文、自动测试、git diff 总结与提交信息生成。',
+        tags: ['Python', 'LLM API', 'CLI', 'Automation']
+      },
+      {
+        title: 'Vue 3 Portfolio Blog',
+        desc: '用 Vue 3 与 Router 构建多页面作品站，把展示、内容组织、品牌表达和部署能力整合到一个可持续迭代的站点中。',
+        tags: ['Vue 3', 'Router', 'UI', 'GitHub Pages']
+      },
+      {
+        title: 'Automation Workflow Suite',
+        desc: '围绕消息发送、文件处理、脚本联动和第三方服务整合，把高频重复动作收敛成可复用工具链。',
+        tags: ['Workflow', 'PowerShell', 'Python', 'Integration']
+      }
+    ];
+
+    const HomePage = {
+      template: `
+        <div class="page shell">
+          <section class="hero">
+            <div class="hero-main glass fade-up">
+              <div class="hero-badge">Vue 3 Portfolio · Frontend × AI × Shipping</div>
+              <h1 class="hero-title">
+                我把 <span class="accent">前端体验</span>、<span class="accent">AI 能力</span> 和 <span class="accent">自动化流程</span><br />
+                做成真正可以上线的产品。
+              </h1>
+              <p class="hero-desc">
+                我是 <strong>Litj</strong>，聚焦前端开发与 AI 应用开发。相比单点技能，我更擅长把界面表达、工具整合、自动化流程和部署发布串成一个完整闭环，让作品既能展示，又能实际落地。
+              </p>
+              <div class="actions">
+                <RouterLink class="btn btn-primary" to="/projects">查看项目</RouterLink>
+                <RouterLink class="btn btn-secondary" to="/ai-guides">看 AI 教程</RouterLink>
+              </div>
+              <div class="stats">
+                <div class="stat"><strong>Frontend</strong><span>重视视觉层级、滚动质感、交互反馈与整体完成度。</span></div>
+                <div class="stat"><strong>AI Apps</strong><span>擅长把模型能力接到文件、工作流和业务动作中。</span></div>
+                <div class="stat"><strong>Shipping</strong><span>习惯把项目推进到可部署、可展示、可持续迭代的状态。</span></div>
+              </div>
+            </div>
+            <div class="hero-side">
+              <div class="hero-side-card glass fade-up lift">
+                <h3>核心关键词</h3>
+                <div class="chips">
+                  <span class="chip">前端开发</span>
+                  <span class="chip">AI 工具整合</span>
+                  <span class="chip">自动化项目</span>
+                  <span class="chip">独立项目落地</span>
+                  <span class="chip">技术表达</span>
+                  <span class="chip">部署上线</span>
+                </div>
+              </div>
+              <div class="hero-side-card glass fade-up lift">
+                <h3>我想传达的价值</h3>
+                <p>我不想只展示“会什么框架”，而是展示我能把想法真正做成一个完整数字产品：看起来专业、流程跑得通、最终能上线。</p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-block">
+            <div class="section-head fade-up">
+              <h2>为什么这个站值得放进简历</h2>
+              <p>因为它不只是主页，而是一套有结构、有内容、有技术选型、有发布链路的完整作品站。</p>
+            </div>
+            <div class="grid-3">
+              <div class="card glass fade-up lift">
+                <h3>技术选型明确</h3>
+                <p>使用 Vue 3 + Router 做内容组织，不是简单静态拼页面，体现了更清晰的工程思维。</p>
+              </div>
+              <div class="card glass fade-up lift">
+                <h3>内容表达更强</h3>
+                <p>不仅有项目，还有 AI 教程、自动化实践与博客栏目，更像一个真正持续更新的技术站点。</p>
+              </div>
+              <div class="card glass fade-up lift">
+                <h3>部署闭环完整</h3>
+                <p>从设计、开发到 GitHub Pages 和自定义域名上线，形成了真实的产品交付路径。</p>
+              </div>
+            </div>
+          </section>
+        </div>
+      `,
+      components: { RouterLink }
     };
 
-    let raf = false;
-    window.addEventListener('scroll', () => {
-      if (!raf) {
-        requestAnimationFrame(() => {
-          setProgress();
-          raf = false;
-        });
-        raf = true;
+    const ProjectsPage = {
+      setup() { return { projects }; },
+      template: `
+        <div class="page shell">
+          <div class="section-head fade-up">
+            <h2>项目 / 案例</h2>
+            <p>这些项目不只是“写过什么”，更重要的是体现出我如何把技术、工具和交付思维组合成结果。</p>
+          </div>
+          <div class="grid-3">
+            <div class="card glass fade-up lift" v-for="item in projects" :key="item.title">
+              <h3>{{ item.title }}</h3>
+              <p>{{ item.desc }}</p>
+              <div class="tags">
+                <span class="tag" v-for="tag in item.tags" :key="tag">{{ tag }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const AIGuidesPage = {
+      template: `
+        <div class="page shell">
+          <div class="section-head fade-up">
+            <h2>AI 使用教程</h2>
+            <p>这一栏我故意做得偏“方法论”，因为相比工具名，面试里更能加分的是你如何把 AI 变成可复用能力。</p>
+          </div>
+          <div class="grid-2">
+            <div class="section glass fade-up lift">
+              <h3>教程 01：如何设计一个真正可用的 AI 助手</h3>
+              <div class="list">
+                <div class="list-item"><div class="dot"></div><div><strong>定义任务边界</strong><span>先搞清楚这个助手解决的是哪类重复问题，而不是一上来就喂模型。</span></div></div>
+                <div class="list-item"><div class="dot"></div><div><strong>设计上下文输入</strong><span>把文件、历史操作、用户偏好和当前目标组织成结构化上下文，才有稳定输出。</span></div></div>
+                <div class="list-item"><div class="dot"></div><div><strong>补测试和回退路径</strong><span>真正可用的 AI 工具，一定要有校验、预览和失败兜底，而不是直接覆盖生产内容。</span></div></div>
+              </div>
+            </div>
+            <div class="section glass fade-up lift">
+              <h3>教程 02：Prompt 工程的重点不是“花哨”</h3>
+              <p>真正有效的 Prompt，往往是约束清晰、上下文准确、输出格式稳定。比起堆很多“魔法咒语”，更重要的是边界、结构和后处理。</p>
+              <div class="chips">
+                <span class="chip">结构化输出</span>
+                <span class="chip">JSON / Patch</span>
+                <span class="chip">Tool Use</span>
+                <span class="chip">Validation</span>
+              </div>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="article-grid">
+              <div class="article-card glass fade-up lift">
+                <div class="article-meta">Practical AI</div>
+                <h3>如何把 AI 接到文件流里</h3>
+                <p>从读取文件、生成修改建议、输出 patch，到测试和提交，形成一条真实开发链路。</p>
+              </div>
+              <div class="article-card glass fade-up lift">
+                <div class="article-meta">Deployment</div>
+                <h3>为什么 AI 工具也要考虑发布</h3>
+                <p>能在本地跑不够，真正有价值的是：它能不能被别人使用、被你自己长期复用。</p>
+              </div>
+              <div class="article-card glass fade-up lift">
+                <div class="article-meta">Workflow</div>
+                <h3>从“问模型”到“搭系统”的思维转变</h3>
+                <p>真正拉开差距的不是会不会用 AI，而是会不会把它嵌进一个持续工作的流程系统。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const AutomationPage = {
+      template: `
+        <div class="page shell">
+          <div class="section-head fade-up">
+            <h2>自动化实践</h2>
+            <p>我的自动化项目重点从来不只是“省几步点击”，而是把流程转化成长期可复用的能力资产。</p>
+          </div>
+          <div class="grid-2">
+            <div class="section glass fade-up lift">
+              <h3>我的自动化思路</h3>
+              <div class="list">
+                <div class="list-item"><div class="dot"></div><div><strong>先找重复动作</strong><span>凡是高频、低判断、可标准化的步骤，都值得收敛成脚本或工具。</span></div></div>
+                <div class="list-item"><div class="dot"></div><div><strong>再做输入输出标准化</strong><span>明确输入参数、输出结构和错误处理，后续才方便组合成更大的系统。</span></div></div>
+                <div class="list-item"><div class="dot"></div><div><strong>最后做可发布能力</strong><span>脚本只是起点，真正有价值的是把它做成别人也能用的可交付工具。</span></div></div>
+              </div>
+            </div>
+            <div class="section glass fade-up lift">
+              <h3>典型场景</h3>
+              <div class="chips">
+                <span class="chip">文件批处理</span>
+                <span class="chip">消息联动</span>
+                <span class="chip">任务编排</span>
+                <span class="chip">脚本式运维</span>
+                <span class="chip">内容生成流水线</span>
+                <span class="chip">部署辅助</span>
+              </div>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="timeline">
+              <div class="timeline-item glass fade-up"><small>Step 01</small><strong>发现流程中的摩擦</strong><p>先找出耗时、重复、容易错的动作。</p></div>
+              <div class="timeline-item glass fade-up"><small>Step 02</small><strong>封装成可执行能力</strong><p>写脚本、做命令、加参数和输出标准。</p></div>
+              <div class="timeline-item glass fade-up"><small>Step 03</small><strong>接上 AI 和工具生态</strong><p>把模型能力、文件系统、GitHub、部署动作串起来。</p></div>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const BlogPage = {
+      setup() { return { articles }; },
+      template: `
+        <div class="page shell">
+          <div class="section-head fade-up">
+            <h2>博客文章</h2>
+            <p>这里的内容会偏向项目方法论、AI 工具使用、前端表达与自动化实践。</p>
+          </div>
+          <div class="article-grid">
+            <div class="article-card glass fade-up lift" v-for="article in articles" :key="article.title">
+              <div class="article-meta">{{ article.category }}</div>
+              <h3>{{ article.title }}</h3>
+              <p>{{ article.desc }}</p>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const AboutPage = {
+      template: `
+        <div class="page shell">
+          <div class="section-head fade-up">
+            <h2>关于 / 联系</h2>
+            <p>如果你希望找到一个既能做前端体验，又能把 AI 接进真实流程的人，这里就是你该看到的那种组合型能力展示。</p>
+          </div>
+          <div class="grid-2">
+            <div class="section glass fade-up lift">
+              <h3>我想做的事</h3>
+              <p>我更偏好做那些兼具视觉表达、技术实现、工具整合和真实部署的项目。对我来说，作品不应该只停在截图和概念，而应该跑起来、发出去、能被使用。</p>
+            </div>
+            <div class="section glass fade-up lift">
+              <h3>联系方式</h3>
+              <div class="list">
+                <div class="list-item"><div class="dot"></div><div><strong>Email</strong><span>625681352@qq.com</span></div></div>
+                <div class="list-item"><div class="dot"></div><div><strong>GitHub</strong><span>github.com/ltj199626</span></div></div>
+                <div class="list-item"><div class="dot"></div><div><strong>Focus</strong><span>前端开发 / AI 应用开发 / 自动化系统 / 独立项目落地</span></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="cta glass fade-up">
+            <h2>我想做的不只是功能，<br />而是能被记住的产品表达。</h2>
+            <p>如果你在看一个人是否值得加入团队，除了技术本身，我更愿意用真正上线的作品、完整闭环的工具和持续输出的内容来回答这个问题。</p>
+            <div class="actions" style="justify-content:center;">
+              <a class="btn btn-primary" href="mailto:625681352@qq.com">发邮件联系我</a>
+              <a class="btn btn-secondary" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">查看 GitHub</a>
+            </div>
+          </div>
+        </div>
+      `
+    };
+
+    const routes = [
+      { path: '/', component: HomePage },
+      { path: '/projects', component: ProjectsPage },
+      { path: '/ai-guides', component: AIGuidesPage },
+      { path: '/automation', component: AutomationPage },
+      { path: '/blog', component: BlogPage },
+      { path: '/about', component: AboutPage }
+    ];
+
+    const router = createRouter({
+      history: createWebHashHistory(),
+      routes,
+      scrollBehavior() {
+        return { top: 0, behavior: 'smooth' };
       }
-    }, { passive: true });
-    setProgress();
+    });
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
+    const App = {
+      setup() {
+        const progress = ref(0);
 
-    revealEls.forEach(el => observer.observe(el));
+        const updateProgress = () => {
+          const height = document.documentElement.scrollHeight - window.innerHeight;
+          progress.value = height <= 0 ? 0 : (window.scrollY / height) * 100;
+        };
+
+        const reveal = () => {
+          document.querySelectorAll('.fade-up').forEach((el) => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight * 0.92) {
+              el.classList.add('visible');
+            }
+          });
+        };
+
+        onMounted(() => {
+          const tick = () => {
+            updateProgress();
+            reveal();
+          };
+
+          tick();
+          window.addEventListener('scroll', tick, { passive: true });
+          window.addEventListener('resize', tick);
+        });
+
+        watch(() => router.currentRoute.value.fullPath, async () => {
+          await nextTick();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            reveal();
+            updateProgress();
+          }, 60);
+        });
+
+        return { progress };
+      },
+      components: { RouterLink, RouterView },
+      template: `
+        <div>
+          <div class="progress" :style="{ width: progress + '%' }"></div>
+          <div class="ambient"></div>
+          <div class="ambient-2"></div>
+          <div class="shell">
+            <nav class="nav glass fade-up visible">
+              <div class="nav-inner">
+                <RouterLink class="brand" to="/">
+                  <div class="brand-mark">L</div>
+                  <div>Litj / Vue 3 Portfolio</div>
+                </RouterLink>
+                <div class="nav-links">
+                  <RouterLink class="nav-link" to="/">首页</RouterLink>
+                  <RouterLink class="nav-link" to="/projects">项目</RouterLink>
+                  <RouterLink class="nav-link" to="/ai-guides">AI 教程</RouterLink>
+                  <RouterLink class="nav-link" to="/automation">自动化</RouterLink>
+                  <RouterLink class="nav-link" to="/blog">博客</RouterLink>
+                  <RouterLink class="nav-link" to="/about">关于</RouterLink>
+                </div>
+              </div>
+            </nav>
+          </div>
+          <RouterView />
+          <div class="shell">
+            <footer>© ${new Date().getFullYear()} Litj · Vue 3 Portfolio · Built for interview impact and real deployment.</footer>
+          </div>
+        </div>
+      `
+    };
+
+    createApp(App).use(router).mount('#app');
   </script>
 </body>
 </html>
