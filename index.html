@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Litj — Frontend × AI Builder</title>
+  <meta name="description" content="Litj 的个人博客 / 作品主页，聚焦前端开发、AI 应用开发、自动化系统与独立项目落地。" />
+  <meta name="theme-color" content="#070b17" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-soft: #0a1024;
+      --panel: rgba(10, 16, 36, 0.72);
+      --panel-2: rgba(14, 23, 48, 0.82);
+      --text: #ecf5ff;
+      --muted: #9cb5d1;
+      --line: rgba(255,255,255,0.08);
+      --blue: #62b8ff;
+      --violet: #9c7bff;
+      --green: #69f0b2;
+      --pink: #ff6fb5;
+      --shadow: 0 20px 80px rgba(0,0,0,.35);
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 10% 10%, rgba(98,184,255,.16), transparent 28%),
+        radial-gradient(circle at 90% 20%, rgba(156,123,255,.16), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(105,240,178,.12), transparent 28%),
+        linear-gradient(180deg, #040713 0%, #060b1a 40%, #071122 100%);
+      overflow-x: hidden;
+    }
+
+    .noise, .glow {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .noise {
+      opacity: 0.05;
+      background-image:
+        linear-gradient(rgba(255,255,255,.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+      background-size: 26px 26px;
+      mask-image: radial-gradient(circle at center, black, transparent 85%);
+    }
+
+    .glow::before,
+    .glow::after {
+      content: "";
+      position: absolute;
+      width: 42vw;
+      height: 42vw;
+      filter: blur(80px);
+      border-radius: 999px;
+      opacity: 0.18;
+    }
+
+    .glow::before {
+      top: -10vw;
+      left: -6vw;
+      background: var(--blue);
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+
+    .glow::after {
+      right: -8vw;
+      top: 18vh;
+      background: var(--violet);
+      animation: drift 14s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes drift {
+      from { transform: translate3d(0,0,0) scale(1); }
+      to { transform: translate3d(30px, -20px, 0) scale(1.08); }
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 16px;
+      z-index: 20;
+      margin-top: 16px;
+      backdrop-filter: blur(16px);
+      background: rgba(7, 11, 23, 0.55);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .4px;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      color: #04111f;
+      box-shadow: 0 10px 30px rgba(98,184,255,.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav a {
+      color: var(--muted);
+      text-decoration: none;
+      padding: 10px 14px;
+      border-radius: 999px;
+      transition: .2s ease;
+      font-size: 14px;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.06);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 22px;
+      padding: 52px 0 28px;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+
+    .hero-main {
+      padding: 34px;
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+    }
+
+    .hero-main::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top right, rgba(98,184,255,.18), transparent 26%),
+        radial-gradient(circle at bottom left, rgba(156,123,255,.14), transparent 30%);
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(255,255,255,.04);
+      color: #d7e8fb;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: .95;
+      letter-spacing: -2px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #ffffff 0%, #8ccfff 35%, #79f0c7 65%, #b389ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 20px 0 0;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.8;
+      max-width: 680px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 700;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue), var(--violet));
+      color: #04111f;
+      box-shadow: 0 12px 28px rgba(98,184,255,.22);
+    }
+
+    .btn-secondary {
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .hero-stat {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+    }
+
+    .hero-stat .num {
+      font-size: 28px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+
+    .hero-stat .label {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .hero-side {
+      display: grid;
+      gap: 20px;
+    }
+
+    .mini-card {
+      padding: 24px;
+    }
+
+    .mini-card h3,
+    .section h2,
+    .project-card h3,
+    .post h3 {
+      margin: 0 0 12px;
+      font-size: 20px;
+    }
+
+    .mini-card p,
+    .section p,
+    .post p,
+    .project-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+
+    .stack {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      font-size: 13px;
+      color: #dce9f8;
+    }
+
+    section.block {
+      padding: 18px 0 8px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 14px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 42px);
+      letter-spacing: -1px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0;
+      line-height: 1.7;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .section,
+    .project-card,
+    .post {
+      padding: 24px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .bullet-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .bullet {
+      display: grid;
+      grid-template-columns: 12px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 999px;
+      margin-top: 6px;
+      background: linear-gradient(135deg, var(--green), var(--blue));
+      box-shadow: 0 0 18px rgba(105,240,178,.35);
+    }
+
+    .project-grid,
+    .post-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .project-card {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .project-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,.04), transparent 40%);
+      pointer-events: none;
+    }
+
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid var(--line);
+      color: #d8e7f7;
+    }
+
+    .post {
+      min-height: 100%;
+    }
+
+    .post-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .cta {
+      padding: 34px;
+      margin: 26px 0 56px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(98,184,255,.16), transparent 25%),
+        radial-gradient(circle at 80% 80%, rgba(255,111,181,.14), transparent 25%),
+        var(--panel-2);
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .cta h2 {
+      margin: 0 0 12px;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: -1px;
+    }
+
+    .cta p {
+      margin: 0 auto 22px;
+      max-width: 720px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 0 0 40px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1080px) {
+      .hero,
+      .grid-2,
+      .project-grid,
+      .post-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .hero-main,
+      .mini-card,
+      .section,
+      .project-card,
+      .post,
+      .cta {
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-inner {
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <div class="glow"></div>
+
+  <div class="wrap">
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="brand">
+          <div class="brand-mark">L</div>
+          <div>Litj / Frontend × AI Builder</div>
+        </div>
+        <div class="nav-links">
+          <a href="#about">关于</a>
+          <a href="#projects">项目</a>
+          <a href="#writing">博客</a>
+          <a href="#contact">联系</a>
+        </div>
+      </div>
+    </nav>
+
+    <header class="hero">
+      <section class="hero-main card">
+        <div class="eyebrow">⚡ 独立落地 · 自动化 · 前端体验 · AI 工具整合</div>
+        <h1>
+          我做的是<br />
+          <span class="gradient-text">能上线、能跑、能带来结果</span><br />
+          的数字产品。
+        </h1>
+        <p>
+          我是 <strong>Litj</strong>，方向聚焦在 <strong>前端开发</strong> 与 <strong>AI 应用开发</strong>。
+          我喜欢把复杂流程拆成可执行系统：从交互界面、自动化工作流，到 AI 工具整合与独立项目落地，重点不是“概念很酷”，而是<strong>真正做出来并跑起来</strong>。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#projects">看项目</a>
+          <a class="btn btn-secondary" href="#contact">联系我</a>
+        </div>
+        <div class="hero-grid">
+          <div class="hero-stat">
+            <div class="num">Frontend</div>
+            <div class="label">重视视觉表现、交互细节与可发布的完整页面体验。</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">AI Apps</div>
+            <div class="label">擅长把模型、自动化、脚本与业务流程整合成可用工具。</div>
+          </div>
+          <div class="hero-stat">
+            <div class="num">0 → 1</div>
+            <div class="label">偏好独立推进，从想法、实现到部署上线形成闭环。</div>
+          </div>
+        </div>
+      </section>
+
+      <div class="hero-side">
+        <section class="mini-card card">
+          <h3>核心标签</h3>
+          <div class="stack">
+            <span class="chip">前端开发</span>
+            <span class="chip">AI 应用开发</span>
+            <span class="chip">自动化系统</span>
+            <span class="chip">工作流整合</span>
+            <span class="chip">独立项目落地</span>
+            <span class="chip">GitHub / Deploy</span>
+          </div>
+        </section>
+        <section class="mini-card card">
+          <h3>我的价值</h3>
+          <p>
+            我不仅会写页面，还会把页面后面的流程接起来；不仅会接 AI，还会把它变成一个能持续使用的工具。对面试官来说，这比“会几个技术名词”更有说服力。
+          </p>
+        </section>
+      </div>
+    </header>
+
+    <section class="block" id="about">
+      <div class="section-head">
+        <h2>关于我</h2>
+        <p>我更像一个把前端能力、自动化思维和 AI 工具串起来的 Builder，而不是只写某一层代码的人。</p>
+      </div>
+      <div class="grid-2">
+        <article class="section">
+          <h2>我擅长的事情</h2>
+          <div class="bullet-list">
+            <div class="bullet"><div class="dot"></div><div><strong>把需求做成可交付界面</strong><br /><span style="color:var(--muted)">从静态页面到高表现力的交互型作品，注重视觉完成度和可展示性。</span></div></div>
+            <div class="bullet"><div class="dot"></div><div><strong>把 AI 接进真实流程</strong><br /><span style="color:var(--muted)">不是停留在调用模型，而是把生成、编辑、自动化、部署串成完整链路。</span></div></div>
+            <div class="bullet"><div class="dot"></div><div><strong>把复杂操作自动化</strong><br /><span style="color:var(--muted)">适合把重复劳动收敛成脚本、工具或小系统，提高效率和稳定性。</span></div></div>
+          </div>
+        </article>
+        <article class="section">
+          <h2>我希望被看到的特质</h2>
+          <div class="bullet-list">
+            <div class="bullet"><div class="dot"></div><div><strong>有落地意识</strong><br /><span style="color:var(--muted)">会考虑发布、部署、域名、上线效果，而不是只停在本地 demo。</span></div></div>
+            <div class="bullet"><div class="dot"></div><div><strong>有整合能力</strong><br /><span style="color:var(--muted)">能把前端、脚本、GitHub、自动化和 AI 工具组合成可用成果。</span></div></div>
+            <div class="bullet"><div class="dot"></div><div><strong>能独立推进</strong><br /><span style="color:var(--muted)">从 idea 到成品，我更习惯自己把关键环节打通。</span></div></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="projects">
+      <div class="section-head">
+        <h2>精选项目</h2>
+        <p>这些项目不只是“写了什么”，更重要的是它们体现了我的实现路径：快速构建、可视化表达、自动化串联、最终上线。</p>
+      </div>
+      <div class="project-grid">
+        <article class="project-card">
+          <h3>AI Coding Assistant CLI</h3>
+          <p>从零搭一个本地 coding assistant，支持代码生成、解释、diff/patch、安全局部修改、多文件上下文、自动测试、git diff 总结与 commit message 生成。</p>
+          <div class="tag-row">
+            <span class="tag">Python</span>
+            <span class="tag">LLM API</span>
+            <span class="tag">Automation</span>
+            <span class="tag">CLI</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <h3>HTML Snake Game</h3>
+          <p>一个带霓虹科技风 UI 的单文件小游戏，具备交互、状态管理、速度控制与 GitHub Pages 发布能力，适合作为前端基础表现力展示。</p>
+          <div class="tag-row">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">JavaScript</span>
+            <span class="tag">GitHub Pages</span>
+          </div>
+        </article>
+        <article class="project-card">
+          <h3>自动化工作流整合</h3>
+          <p>围绕消息发送、文件处理、脚本执行、工具联动，做过多种自动化方案，把繁琐重复任务压缩成可复用流程。</p>
+          <div class="tag-row">
+            <span class="tag">Workflow</span>
+            <span class="tag">PowerShell</span>
+            <span class="tag">Python</span>
+            <span class="tag">Integration</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="writing">
+      <div class="section-head">
+        <h2>博客 / 思考</h2>
+        <p>这个区域既可以当博客，也可以当面试时的“方法论展示区”。我更喜欢写怎么把问题拆开、怎么把工具真正接进场景里。</p>
+      </div>
+      <div class="post-grid">
+        <article class="post">
+          <div class="post-meta">AI × Workflow</div>
+          <h3>把 AI 真正接进工作流，不只是调用一次 API</h3>
+          <p>好的 AI 应用不是“能回答”，而是能接住上下文、接住文件、接住动作、接住发布流程，然后形成闭环。</p>
+        </article>
+        <article class="post">
+          <div class="post-meta">Frontend × Product</div>
+          <h3>一个能加分的前端作品，为什么不能只是把页面做出来</h3>
+          <p>真正让人印象深刻的，往往是体验、视觉、节奏和完成度，而不是技术栈名称本身。</p>
+        </article>
+        <article class="post">
+          <div class="post-meta">Independent Building</div>
+          <h3>从 idea 到上线，我更看重的是“最后 20%”</h3>
+          <p>很多作品输在收尾：发布、域名、交互打磨、可访问性、展示路径。把这些做好，才更像真正的项目。</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="cta" id="contact">
+      <h2>我想做的，不只是功能，<br /><span class="gradient-text">而是能被记住的产品表达。</span></h2>
+      <p>
+        如果你在找一个既能做前端视觉与交互、又能把 AI 和自动化接进真实业务流程的人，欢迎联系我。
+        我擅长把想法快速做成可展示、可部署、可继续迭代的成果。
+      </p>
+      <div class="hero-actions" style="justify-content:center;">
+        <a class="btn btn-primary" href="mailto:625681352@qq.com">发邮件联系我</a>
+        <a class="btn btn-secondary" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">GitHub</a>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Litj · Built for portfolio, interview impact, and real deployment.
+    </footer>
+  </div>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.animate([
+            { opacity: 0, transform: 'translateY(24px)' },
+            { opacity: 1, transform: 'translateY(0)' }
+          ], {
+            duration: 700,
+            easing: 'cubic-bezier(.2,.65,.2,1)',
+            fill: 'forwards'
+          });
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.card, .section, .project-card, .post, .cta').forEach((el) => {
+      el.style.opacity = 0;
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
