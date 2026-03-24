@@ -4,630 +4,182 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Litj — Frontend & AI Portfolio</title>
-  <meta name="description" content="Litj 的个人博客 / 作品主页，聚焦前端开发、AI 应用开发、自动化系统与独立项目落地。" />
-  <meta name="theme-color" content="#f3f6fb" />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <meta name="description" content="Litj 的个人博客 / 作品主页，聚焦前端开发、AI 应用开发、自动化项目与独立产品落地。" />
+  <meta name="theme-color" content="#f5f5f7" />
   <style>
     :root {
-      --bg: #eef3f9;
-      --bg-2: #f8fbff;
-      --card: rgba(255,255,255,0.68);
-      --card-strong: rgba(255,255,255,0.82);
-      --line: rgba(15, 23, 42, 0.08);
-      --text: #0f172a;
-      --muted: #5b6b83;
-      --blue: #0a84ff;
-      --blue-soft: #5ac8fa;
-      --violet: #7c5cff;
-      --green: #30d158;
-      --pink: #ff6482;
-      --shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
-      --radius-xl: 30px;
-      --radius-lg: 24px;
-      --radius-md: 18px;
+      --bg: #f5f5f7;
+      --bg-soft: #fbfbfd;
+      --text: #1d1d1f;
+      --muted: #6e6e73;
+      --line: rgba(0,0,0,.08);
+      --card: rgba(255,255,255,.76);
+      --blue: #0071e3;
+      --blue-soft: #4da3ff;
+      --shadow: 0 20px 60px rgba(0,0,0,.08);
+      --radius-xl: 32px;
       --max: 1180px;
+      --nav-h: 72px;
     }
-
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Inter, "PingFang SC", "SF Pro Display", "Microsoft YaHei", sans-serif;
       color: var(--text);
       background:
-        radial-gradient(circle at top left, rgba(90,200,250,.22), transparent 26%),
-        radial-gradient(circle at 85% 12%, rgba(124,92,255,.16), transparent 22%),
-        radial-gradient(circle at 50% 100%, rgba(48,209,88,.12), transparent 24%),
-        linear-gradient(180deg, var(--bg-2), var(--bg));
-      overflow-x: hidden;
+        radial-gradient(circle at top left, rgba(77,163,255,.14), transparent 22%),
+        radial-gradient(circle at 100% 0%, rgba(0,113,227,.08), transparent 18%),
+        linear-gradient(180deg, #fafafc 0%, #f2f4f7 100%);
+      font-family: "MiSans", "MiSans Normal", "PingFang SC", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
+      overflow-x: hidden;
     }
-
-    ::selection {
-      background: rgba(10,132,255,.18);
+    ::selection { background: rgba(0,113,227,.16); }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,.03); }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, rgba(0,113,227,.42), rgba(77,163,255,.68));
+      border-radius: 999px;
+      border: 2px solid rgba(255,255,255,.75);
     }
-
-    .ambient {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, rgba(0,113,227,.58), rgba(77,163,255,.86));
     }
-
-    .ambient::before,
-    .ambient::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      filter: blur(80px);
-      opacity: .36;
-      will-change: transform;
-      transform: translateZ(0);
-    }
-
-    .ambient::before {
-      width: 34vw;
-      height: 34vw;
-      left: -6vw;
-      top: -10vh;
-      background: rgba(90,200,250,.46);
-      animation: floatA 16s ease-in-out infinite alternate;
-    }
-
-    .ambient::after {
-      width: 30vw;
-      height: 30vw;
-      right: -8vw;
-      top: 12vh;
-      background: rgba(124,92,255,.28);
-      animation: floatB 18s ease-in-out infinite alternate;
-    }
-
-    @keyframes floatA {
-      from { transform: translate3d(0,0,0) scale(1); }
-      to { transform: translate3d(28px, 16px, 0) scale(1.08); }
-    }
-
-    @keyframes floatB {
-      from { transform: translate3d(0,0,0) scale(1); }
-      to { transform: translate3d(-22px, 26px, 0) scale(1.12); }
-    }
-
-    .grid-noise {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-      background-image:
-        linear-gradient(rgba(255,255,255,.22) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.16) 1px, transparent 1px);
-      background-size: 34px 34px;
-      opacity: .2;
-      mask-image: radial-gradient(circle at center, black, transparent 86%);
-    }
-
     .progress {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 3px;
-      width: 0;
-      z-index: 50;
-      background: linear-gradient(90deg, var(--blue), var(--violet), var(--pink));
-      box-shadow: 0 0 18px rgba(10,132,255,.45);
-      transform-origin: left center;
+      position: fixed; top: 0; left: 0; width: 0; height: 3px; z-index: 60;
+      background: linear-gradient(90deg, #0071e3, #5ac8fa);
+      box-shadow: 0 0 16px rgba(0,113,227,.26);
     }
-
-    .cursor-glow {
-      position: fixed;
-      width: 180px;
-      height: 180px;
-      margin-left: -90px;
-      margin-top: -90px;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 1;
-      background: radial-gradient(circle, rgba(10,132,255,.12), transparent 70%);
-      transition: transform .12s linear;
-      mix-blend-mode: plus-lighter;
+    .bg-orb,.bg-orb-2 {
+      position: fixed; border-radius: 50%; filter: blur(80px); pointer-events: none; z-index: 0;
+      opacity: .24; will-change: transform; transform: translateZ(0);
     }
-
-    .wrap {
-      position: relative;
-      z-index: 2;
-      width: min(var(--max), calc(100% - 28px));
-      margin: 0 auto;
+    .bg-orb {
+      width: 30vw; height: 30vw; left: -6vw; top: -10vh;
+      background: rgba(77,163,255,.45); animation: driftA 16s ease-in-out infinite alternate;
     }
-
+    .bg-orb-2 {
+      width: 26vw; height: 26vw; right: -8vw; top: 20vh;
+      background: rgba(0,113,227,.22); animation: driftB 18s ease-in-out infinite alternate;
+    }
+    @keyframes driftA { from { transform: translate3d(0,0,0) scale(1);} to { transform: translate3d(30px,12px,0) scale(1.08);} }
+    @keyframes driftB { from { transform: translate3d(0,0,0) scale(1);} to { transform: translate3d(-26px,20px,0) scale(1.08);} }
+    .wrap { width: min(var(--max), calc(100% - 32px)); margin: 0 auto; position: relative; z-index: 2; }
     .glass {
       background: var(--card);
-      backdrop-filter: blur(22px) saturate(160%);
-      -webkit-backdrop-filter: blur(22px) saturate(160%);
-      border: 1px solid rgba(255,255,255,.54);
+      border: 1px solid rgba(255,255,255,.85);
+      backdrop-filter: blur(24px) saturate(160%);
+      -webkit-backdrop-filter: blur(24px) saturate(160%);
       box-shadow: var(--shadow);
     }
-
     .nav {
-      position: sticky;
-      top: 16px;
-      z-index: 30;
-      margin-top: 14px;
-      border-radius: 22px;
+      position: sticky; top: 14px; z-index: 40; margin-top: 14px; border-radius: 24px;
+      transition: transform .45s cubic-bezier(.22,.61,.36,1), background .35s ease;
     }
-
     .nav-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 18px;
-      gap: 14px;
-      flex-wrap: wrap;
+      min-height: var(--nav-h); display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 12px 18px; flex-wrap: wrap;
     }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-weight: 700;
-      font-size: 14px;
-      letter-spacing: .2px;
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 14px; font-weight: 700; }
+    .brand-mark {
+      width: 40px; height: 40px; border-radius: 15px; display: grid; place-items: center; color: white;
+      font-weight: 800; background: linear-gradient(135deg, #0071e3, #4da3ff); box-shadow: 0 10px 24px rgba(0,113,227,.22);
     }
-
-    .brand-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, #fff, rgba(255,255,255,.68));
-      color: var(--blue);
-      border: 1px solid rgba(255,255,255,.6);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.6);
-      font-weight: 800;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
+    .nav-links { display: flex; gap: 8px; flex-wrap: wrap; }
     .nav-links a {
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 600;
-      padding: 10px 14px;
-      border-radius: 999px;
-      transition: background .25s ease, color .25s ease, transform .25s ease;
+      text-decoration: none; color: var(--muted); font-size: 13px; font-weight: 600;
+      padding: 10px 14px; border-radius: 999px; transition: .25s ease;
     }
-
-    .nav-links a:hover {
-      background: rgba(255,255,255,.62);
-      color: var(--text);
-      transform: translateY(-1px);
-    }
-
+    .nav-links a:hover { color: var(--text); background: rgba(255,255,255,.82); }
     .hero {
-      display: grid;
-      grid-template-columns: 1.16fr .84fr;
-      gap: 18px;
-      padding: 34px 0 20px;
-      align-items: stretch;
+      padding: 40px 0 20px; display: grid; grid-template-columns: 1.18fr .82fr; gap: 18px; align-items: stretch;
     }
-
-    .hero-main,
-    .hero-side-card,
-    .section,
-    .project-card,
-    .post-card,
-    .cta {
-      border-radius: var(--radius-xl);
-    }
-
+    .hero-main,.panel,.project,.post,.cta { border-radius: var(--radius-xl); overflow: hidden; }
     .hero-main {
-      position: relative;
-      overflow: hidden;
-      min-height: 470px;
-      padding: 28px;
+      min-height: 520px; padding: 34px; position: relative;
+      background: radial-gradient(circle at 10% 10%, rgba(77,163,255,.12), transparent 28%), linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.7));
     }
-
-    .hero-main::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.24), transparent 34%),
-        radial-gradient(circle at 15% 10%, rgba(10,132,255,.14), transparent 26%),
-        radial-gradient(circle at 85% 15%, rgba(124,92,255,.12), transparent 24%);
-      pointer-events: none;
+    .hero-label {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px;
+      background: rgba(255,255,255,.84); border: 1px solid rgba(255,255,255,.96); color: #44556e;
+      font-size: 12px; font-weight: 700; box-shadow: inset 0 1px 0 rgba(255,255,255,.88);
     }
-
-    .eyebrow {
-      position: relative;
-      z-index: 1;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.58);
-      border: 1px solid rgba(255,255,255,.66);
-      font-size: 12px;
-      font-weight: 600;
-      color: #334155;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.65);
-    }
-
     .hero h1 {
-      position: relative;
-      z-index: 1;
-      margin: 16px 0 0;
-      font-size: clamp(34px, 5vw, 58px);
-      line-height: 1.02;
-      letter-spacing: -1.4px;
-      max-width: 760px;
+      margin: 22px 0 0; max-width: 760px; font-size: clamp(26px, 3.9vw, 42px); line-height: 1.2; letter-spacing: -.9px; font-weight: 800;
     }
-
-    .hero h1 .shine {
-      background: linear-gradient(135deg, #0f172a 0%, #0a84ff 38%, #6e5cff 72%, #0f172a 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-
-    .hero p {
-      position: relative;
-      z-index: 1;
-      margin: 18px 0 0;
-      max-width: 670px;
-      font-size: 15px;
-      line-height: 1.9;
-      color: var(--muted);
-    }
-
-    .hero-actions {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-
+    .hero h1 .accent { color: var(--blue); }
+    .hero-lead { margin: 18px 0 0; max-width: 700px; color: var(--muted); font-size: 15px; line-height: 1.95; }
+    .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 26px; }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border-radius: 18px;
-      padding: 13px 16px;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      transition: transform .25s cubic-bezier(.2,.8,.2,1), box-shadow .25s ease, background .25s ease;
-      will-change: transform;
+      text-decoration: none; border-radius: 18px; padding: 13px 18px; font-size: 14px; font-weight: 700;
+      display: inline-flex; align-items: center; justify-content: center;
+      transition: transform .35s cubic-bezier(.22,.61,.36,1), box-shadow .3s ease, background .3s ease;
     }
-
-    .btn:hover {
-      transform: translate3d(0,-3px,0) scale(1.01);
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary { color: white; background: linear-gradient(135deg, #0071e3, #4da3ff); box-shadow: 0 16px 34px rgba(0,113,227,.2); }
+    .btn-secondary { color: var(--text); background: rgba(255,255,255,.8); border: 1px solid rgba(255,255,255,.92); }
+    .hero-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 28px; }
+    .stat {
+      padding: 18px; border-radius: 22px; background: rgba(255,255,255,.66); border: 1px solid rgba(255,255,255,.88);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.9);
     }
-
-    .btn-primary {
-      color: white;
-      background: linear-gradient(135deg, var(--blue), var(--violet));
-      box-shadow: 0 16px 32px rgba(10,132,255,.22);
+    .stat strong { display: block; font-size: 22px; margin-bottom: 6px; }
+    .stat span { font-size: 12px; line-height: 1.7; color: var(--muted); }
+    .hero-side { display: grid; gap: 18px; }
+    .panel,.section,.project,.post,.cta {
+      padding: 24px; background: linear-gradient(180deg, rgba(255,255,255,.88), rgba(255,255,255,.72));
     }
-
-    .btn-secondary {
-      color: var(--text);
-      background: rgba(255,255,255,.68);
-      border: 1px solid rgba(255,255,255,.72);
+    .panel h3,.section h3,.project h3,.post h3,.cta h2,.section-head h2 { margin: 0 0 10px; letter-spacing: -.4px; }
+    .panel h3,.section h3,.project h3,.post h3 { font-size: 19px; }
+    .panel p,.section p,.project p,.post p,.section-head p,.cta p {
+      margin: 0; font-size: 14px; line-height: 1.9; color: var(--muted);
     }
-
-    .hero-metrics {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 22px;
+    .chips,.tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; }
+    .chip,.tag {
+      padding: 9px 12px; border-radius: 999px; background: rgba(255,255,255,.82); border: 1px solid rgba(255,255,255,.95);
+      font-size: 12px; font-weight: 700; color: #415168;
     }
-
-    .metric {
-      padding: 18px;
-      border-radius: 22px;
-      background: rgba(255,255,255,.44);
-      border: 1px solid rgba(255,255,255,.6);
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.55);
-      transform: translateZ(0);
-    }
-
-    .metric strong {
-      display: block;
-      font-size: 24px;
-      margin-bottom: 6px;
-    }
-
-    .metric span {
-      display: block;
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--muted);
-    }
-
-    .hero-side {
-      display: grid;
-      gap: 18px;
-    }
-
-    .hero-side-card {
-      padding: 22px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-side-card::after {
-      content: "";
-      position: absolute;
-      inset: auto -15% -55% auto;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(10,132,255,.13), transparent 66%);
-      pointer-events: none;
-    }
-
-    .hero-side-card h3,
-    .section h2,
-    .project-card h3,
-    .post-card h3,
-    .cta h2 {
-      margin: 0 0 10px;
-      font-size: 18px;
-      letter-spacing: -.3px;
-    }
-
-    .hero-side-card p,
-    .section p,
-    .project-card p,
-    .post-card p,
-    .section-head p,
-    .cta p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.85;
-      font-size: 14px;
-    }
-
-    .chip-wrap,
-    .tag-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 14px;
-    }
-
-    .chip,
-    .tag {
-      padding: 10px 12px;
-      border-radius: 999px;
-      font-size: 12px;
-      font-weight: 600;
-      background: rgba(255,255,255,.6);
-      border: 1px solid rgba(255,255,255,.74);
-      color: #314157;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,.68);
-    }
-
-    .section-block {
-      padding: 12px 0 10px;
-    }
-
-    .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 18px;
-      flex-wrap: wrap;
-      margin-bottom: 16px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(24px, 3vw, 38px);
-      letter-spacing: -.9px;
-    }
-
-    .grid-2,
-    .project-grid,
-    .post-grid {
-      display: grid;
-      gap: 18px;
-    }
-
-    .grid-2 {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .project-grid,
-    .post-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .section,
-    .project-card,
-    .post-card,
-    .cta {
-      padding: 22px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hover-lift {
-      transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease;
-      will-change: transform;
-      transform: translateZ(0);
-    }
-
-    .hover-lift:hover {
-      transform: translate3d(0,-8px,0);
-      box-shadow: 0 30px 80px rgba(15,23,42,.14);
-    }
-
-    .section::before,
-    .project-card::before,
-    .post-card::before,
-    .cta::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(255,255,255,.18), transparent 34%);
-      pointer-events: none;
-    }
-
-    .list {
-      display: grid;
-      gap: 12px;
-      margin-top: 14px;
-    }
-
-    .item {
-      display: grid;
-      grid-template-columns: 12px 1fr;
-      gap: 12px;
-      align-items: start;
-    }
-
+    .section-block { padding: 14px 0 10px; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 16px; flex-wrap: wrap; margin-bottom: 16px; }
+    .section-head h2 { margin: 0; font-size: clamp(24px, 3vw, 36px); }
+    .grid-2,.project-grid,.post-grid { display: grid; gap: 18px; }
+    .grid-2 { grid-template-columns: repeat(2, 1fr); }
+    .project-grid,.post-grid { grid-template-columns: repeat(3, 1fr); }
+    .lift { transition: transform .45s cubic-bezier(.22,.61,.36,1), box-shadow .35s ease; }
+    .lift:hover { transform: translateY(-6px); box-shadow: 0 26px 70px rgba(0,0,0,.1); }
+    .list { display: grid; gap: 12px; margin-top: 16px; }
+    .item { display: grid; grid-template-columns: 12px 1fr; gap: 12px; align-items: start; }
     .item-dot {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      margin-top: 5px;
-      background: linear-gradient(135deg, var(--blue), var(--violet));
-      box-shadow: 0 0 18px rgba(10,132,255,.25);
+      width: 12px; height: 12px; border-radius: 50%; margin-top: 5px; background: linear-gradient(135deg, #0071e3, #5ac8fa);
+      box-shadow: 0 0 12px rgba(0,113,227,.22);
     }
-
-    .item strong {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 15px;
-    }
-
-    .item span {
-      color: var(--muted);
-      line-height: 1.8;
-      font-size: 14px;
-    }
-
-    .post-meta {
-      font-size: 11px;
-      letter-spacing: .9px;
-      text-transform: uppercase;
-      color: #72839b;
-      margin-bottom: 8px;
-      font-weight: 700;
-    }
-
-    .hero-orb {
-      position: absolute;
-      right: 24px;
-      bottom: 24px;
-      width: 130px;
-      height: 130px;
-      border-radius: 50%;
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.88), rgba(255,255,255,.1) 42%, rgba(10,132,255,.18) 74%, rgba(124,92,255,.25));
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.85),
-        0 20px 48px rgba(10,132,255,.18);
-      animation: orbFloat 8s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes orbFloat {
-      0%, 100% { transform: translate3d(0,0,0) scale(1); }
-      50% { transform: translate3d(0,-10px,0) scale(1.03); }
-    }
-
-    .cta {
-      margin: 26px 0 56px;
-      text-align: center;
-      background: rgba(255,255,255,.76);
-    }
-
-    footer {
-      text-align: center;
-      color: var(--muted);
-      padding: 0 0 36px;
-      font-size: 13px;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translate3d(0, 18px, 0) scale(.985);
-      transition: opacity .7s cubic-bezier(.2,.8,.2,1), transform .7s cubic-bezier(.2,.8,.2,1);
-      will-change: transform, opacity;
-    }
-
-    .reveal.visible {
-      opacity: 1;
-      transform: translate3d(0, 0, 0) scale(1);
-    }
-
-    @media (max-width: 1080px) {
-      .hero,
-      .grid-2,
-      .project-grid,
-      .post-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
+    .item strong { display: block; margin-bottom: 5px; font-size: 15px; }
+    .item span { display: block; color: var(--muted); font-size: 14px; line-height: 1.85; }
+    .post-meta { margin-bottom: 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .9px; color: #7a7a82; font-weight: 700; }
+    .cta { margin: 26px 0 56px; text-align: center; }
+    footer { text-align: center; color: var(--muted); padding: 0 0 36px; font-size: 13px; }
+    .reveal { opacity: 0; transform: translate3d(0,18px,0); transition: opacity .85s cubic-bezier(.22,.61,.36,1), transform .85s cubic-bezier(.22,.61,.36,1); }
+    .reveal.visible { opacity: 1; transform: translate3d(0,0,0); }
+    @media (max-width: 1080px) { .hero,.grid-2,.project-grid,.post-grid { grid-template-columns: 1fr; } }
     @media (max-width: 720px) {
-      .wrap {
-        width: min(var(--max), calc(100% - 18px));
-      }
-
-      .hero-main,
-      .hero-side-card,
-      .section,
-      .project-card,
-      .post-card,
-      .cta {
-        padding: 18px;
-        border-radius: 22px;
-      }
-
-      .hero h1 {
-        font-size: clamp(28px, 11vw, 42px);
-      }
-
-      .hero-metrics {
-        grid-template-columns: 1fr;
-      }
-
-      .cursor-glow {
-        display: none;
-      }
+      .wrap { width: min(var(--max), calc(100% - 18px)); }
+      .hero-main,.panel,.section,.project,.post,.cta { padding: 18px; border-radius: 22px; }
+      .hero h1 { font-size: clamp(24px, 8vw, 34px); }
+      .hero-stats { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <div class="ambient"></div>
-  <div class="grid-noise"></div>
   <div class="progress" id="progress"></div>
-  <div class="cursor-glow" id="cursorGlow"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb-2"></div>
 
   <div class="wrap">
     <nav class="nav glass reveal">
       <div class="nav-inner">
         <div class="brand">
-          <div class="brand-icon">L</div>
+          <div class="brand-mark">L</div>
           <div>Litj / Frontend & AI Portfolio</div>
         </div>
         <div class="nav-links">
@@ -640,42 +192,30 @@
     </nav>
 
     <header class="hero">
-      <section class="hero-main glass reveal hover-lift" data-tilt>
-        <div class="eyebrow">Apple-like polish · Frontend craft · AI workflow building</div>
+      <section class="hero-main glass reveal">
+        <div class="hero-label">Frontend · AI Apps · Automation · Shipping</div>
         <h1>
-          我做的不只是页面，<br />
-          而是把 <span class="shine">体验、AI、自动化</span><br />
-          一起变成能上线的产品。
+          我把 <span class="accent">前端体验</span>、<span class="accent">AI 能力</span> 与 <span class="accent">自动化流程</span><br />
+          做成真正可以上线的产品。
         </h1>
-        <p>
-          我是 <strong>Litj</strong>，方向聚焦在 <strong>前端开发</strong> 与 <strong>AI 应用开发</strong>。
-          我擅长把界面表现、工具整合、自动化流程和真实部署串成一个完整闭环——不仅“能做”，而且“能交付、能展示、能留下印象”。
+        <p class="hero-lead">
+          我是 <strong>Litj</strong>，聚焦前端开发与 AI 应用开发。相比“只会做页面”或“只会接模型”，我更关注完整闭环：从界面、交互、工具整合，到部署上线与持续迭代，让作品真正具备展示价值和落地价值。
         </p>
         <div class="hero-actions">
-          <a class="btn btn-primary magnetic" href="#projects">查看项目</a>
-          <a class="btn btn-secondary magnetic" href="#contact">联系我</a>
+          <a class="btn btn-primary" href="#projects">查看项目</a>
+          <a class="btn btn-secondary" href="#contact">联系我</a>
         </div>
-        <div class="hero-metrics">
-          <div class="metric">
-            <strong>Frontend</strong>
-            <span>关注留白、层级、滚动体验、交互反馈与细节完成度。</span>
-          </div>
-          <div class="metric">
-            <strong>AI Apps</strong>
-            <span>擅长把模型能力接到真实业务流程，而不是停留在 demo 层。</span>
-          </div>
-          <div class="metric">
-            <strong>Shipping</strong>
-            <span>偏好独立推进，从想法、实现到部署上线形成完整结果。</span>
-          </div>
+        <div class="hero-stats">
+          <div class="stat"><strong>Frontend</strong><span>更重视视觉层级、排版、细节和整体体验完成度。</span></div>
+          <div class="stat"><strong>AI Apps</strong><span>擅长把模型、脚本、文件和工作流接成真正可用的工具。</span></div>
+          <div class="stat"><strong>0 → 1</strong><span>能独立推进，从 idea、实现到部署形成一个完整结果。</span></div>
         </div>
-        <div class="hero-orb"></div>
       </section>
 
       <div class="hero-side">
-        <section class="hero-side-card glass reveal hover-lift" data-tilt>
+        <section class="panel glass reveal lift">
           <h3>核心优势</h3>
-          <div class="chip-wrap">
+          <div class="chips">
             <span class="chip">前端开发</span>
             <span class="chip">AI 工具整合</span>
             <span class="chip">自动化项目</span>
@@ -684,11 +224,9 @@
             <span class="chip">发布部署</span>
           </div>
         </section>
-        <section class="hero-side-card glass reveal hover-lift" data-tilt>
-          <h3>我想传达的价值</h3>
-          <p>
-            我不是只停留在某一层技术的人。相比“会什么框架”，我更想让人看到：我能把一个概念推进成一个可运行、可上线、可被使用的数字产品。
-          </p>
+        <section class="panel glass reveal lift">
+          <h3>我想体现的价值</h3>
+          <p>我希望别人看到的不是“会几个技术名词”，而是我能把一个想法做成真正可交付、可展示、可上线的数字产品。</p>
         </section>
       </div>
     </header>
@@ -696,23 +234,23 @@
     <section class="section-block" id="about">
       <div class="section-head reveal">
         <h2>关于我</h2>
-        <p>我更像一个把前端能力、自动化思维和 AI 工具接在一起的产品型开发者，而不是只负责某个局部模块的人。</p>
+        <p>相比只停留在某一层技术，我更偏向一个把前端、自动化与 AI 工具链真正串起来的 Builder。</p>
       </div>
       <div class="grid-2">
-        <article class="section glass reveal hover-lift" data-tilt>
-          <h2>我擅长的事情</h2>
+        <article class="section glass reveal lift">
+          <h3>我擅长的事情</h3>
           <div class="list">
-            <div class="item"><div class="item-dot"></div><div><strong>把需求做成高完成度界面</strong><span>不仅能搭页面，也会关注视觉节奏、交互反馈、动画质感和整体展示效果。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>把 AI 接进真实工具链</strong><span>更偏向把模型能力接到文件、工作流、脚本和业务动作里，形成真正可用的应用。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>把重复动作系统化</strong><span>我对自动化天然敏感，喜欢把繁琐流程收敛成脚本、工具或可复用能力。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>做高完成度界面</strong><span>重视排版、留白、节奏、滚动质感和交互反馈，而不是只把内容堆上去。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>把 AI 接进真实流程</strong><span>会把模型能力和文件、脚本、工作流、工具系统一起整合，而不是停在单次调用。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>把复杂操作自动化</strong><span>喜欢把繁琐重复的事情收敛成脚本、命令行工具或可持续复用的小系统。</span></div></div>
           </div>
         </article>
-        <article class="section glass reveal hover-lift" data-tilt>
-          <h2>我希望被看到的点</h2>
+        <article class="section glass reveal lift">
+          <h3>我希望被看到的点</h3>
           <div class="list">
-            <div class="item"><div class="item-dot"></div><div><strong>有审美和完成度</strong><span>我会刻意打磨展示层，让作品在面试和作品集场景里更有记忆点。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>有整合和落地能力</strong><span>能把前端、GitHub、自动化、部署和 AI 整成一条完整链路，而不是碎片化能力。</span></div></div>
-            <div class="item"><div class="item-dot"></div><div><strong>能独立推进</strong><span>我习惯从 idea、实现、上线到展示都自己打通，保证结果真正落地。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>有审美和表达</strong><span>会刻意打磨作品展示层，让页面和作品集本身就是能力证明。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>有整合和落地能力</strong><span>能把前端、自动化、GitHub、部署和 AI 工具真正拼成一条完整链路。</span></div></div>
+            <div class="item"><div class="item-dot"></div><div><strong>能独立推进项目</strong><span>习惯从想法、实现到上线自己推进关键节点，保证结果真正落地。</span></div></div>
           </div>
         </article>
       </div>
@@ -721,37 +259,28 @@
     <section class="section-block" id="projects">
       <div class="section-head reveal">
         <h2>精选项目</h2>
-        <p>我更偏好那些既能体现技术实现，也能体现交付思维与视觉表达的项目。</p>
+        <p>这些项目代表我真正想展示的能力：不仅会做，还会整合、上线并把展示效果做好。</p>
       </div>
       <div class="project-grid">
-        <article class="project-card glass reveal hover-lift" data-tilt>
+        <article class="project glass reveal lift">
           <h3>AI Coding Assistant CLI</h3>
-          <p>从零搭建本地 coding assistant，支持代码生成、解释、diff / patch、安全局部修改、多文件上下文、自动测试以及 git 相关辅助能力。</p>
-          <div class="tag-row">
-            <span class="tag">Python</span>
-            <span class="tag">LLM API</span>
-            <span class="tag">Automation</span>
-            <span class="tag">CLI</span>
+          <p>从零搭建本地 coding assistant，支持代码生成、解释、diff / patch、安全局部修改、多文件上下文、自动测试以及 git 辅助能力。</p>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">LLM API</span><span class="tag">Automation</span><span class="tag">CLI</span>
           </div>
         </article>
-        <article class="project-card glass reveal hover-lift" data-tilt>
+        <article class="project glass reveal lift">
           <h3>HTML Snake Game</h3>
-          <p>独立完成一个高表现力的单文件小游戏，从交互、视觉到 GitHub Pages 发布都可直接展示，体现前端实现与上线能力。</p>
-          <div class="tag-row">
-            <span class="tag">HTML</span>
-            <span class="tag">CSS</span>
-            <span class="tag">JavaScript</span>
-            <span class="tag">Deploy</span>
+          <p>独立完成单文件小游戏，从交互、视觉到 GitHub Pages 发布都能直接展示，体现前端实现和上线能力。</p>
+          <div class="tags">
+            <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Deploy</span>
           </div>
         </article>
-        <article class="project-card glass reveal hover-lift" data-tilt>
+        <article class="project glass reveal lift">
           <h3>自动化工作流整合</h3>
           <p>围绕消息、文件、脚本、外部服务做自动化方案，把重复工作压缩成可复用流程，兼顾效率和稳定性。</p>
-          <div class="tag-row">
-            <span class="tag">Workflow</span>
-            <span class="tag">Integration</span>
-            <span class="tag">PowerShell</span>
-            <span class="tag">Python</span>
+          <div class="tags">
+            <span class="tag">Workflow</span><span class="tag">Integration</span><span class="tag">PowerShell</span><span class="tag">Python</span>
           </div>
         </article>
       </div>
@@ -760,36 +289,33 @@
     <section class="section-block" id="writing">
       <div class="section-head reveal">
         <h2>博客 / 思考</h2>
-        <p>我更喜欢写“怎么把问题拆开并做成系统”——这比单纯列技术栈更能体现思考方式。</p>
+        <p>我更喜欢写“如何把一个想法做成真正可运行系统”，而不是只列一串技术关键词。</p>
       </div>
       <div class="post-grid">
-        <article class="post-card glass reveal hover-lift" data-tilt>
+        <article class="post glass reveal lift">
           <div class="post-meta">AI × Workflow</div>
-          <h3>把 AI 真正接进工作流，而不是停留在单次调用</h3>
-          <p>真正有价值的 AI 应用，是能接住上下文、接住文件、接住动作和接住发布链路，最后形成完整闭环。</p>
+          <h3>把 AI 真正接进工作流，而不是停留在一次调用</h3>
+          <p>更有价值的 AI 应用，是能接住上下文、文件、动作和发布流程，最后形成一个完整闭环。</p>
         </article>
-        <article class="post-card glass reveal hover-lift" data-tilt>
+        <article class="post glass reveal lift">
           <div class="post-meta">Frontend × Product</div>
-          <h3>为什么一个前端作品的“感觉”本身就是竞争力</h3>
-          <p>技术栈会被遗忘，但视觉层级、滚动质感、交互细节和完成度，往往更容易让人记住你。</p>
+          <h3>为什么前端作品的“感觉”本身就是竞争力</h3>
+          <p>真正让人记住你的，往往不是技术名词，而是视觉层级、滚动节奏、交互细节和完成度。</p>
         </article>
-        <article class="post-card glass reveal hover-lift" data-tilt>
+        <article class="post glass reveal lift">
           <div class="post-meta">Independent Builder</div>
-          <h3>从 idea 到上线，真正拉开差距的是最后 20%</h3>
-          <p>很多项目输在发布、部署、域名、路径、交互打磨和展示方式。把最后这段走完，作品才真正成立。</p>
+          <h3>从 idea 到上线，拉开差距的是最后 20%</h3>
+          <p>很多项目输在发布、部署、域名、路径、展示与收尾。把最后这段走完，作品才真正成立。</p>
         </article>
       </div>
     </section>
 
-    <section class="cta glass reveal hover-lift" id="contact" data-tilt>
+    <section class="cta glass reveal" id="contact">
       <h2>如果你在找一个既能做前端体验，<br />又能把 AI 接进真实流程的人。</h2>
-      <p>
-        我希望做的不是“看起来很会”，而是“真的把事情做成”。
-        对我来说，优秀的项目应该同时具备视觉表达、工程实现、自动化思维和部署落地能力。
-      </p>
+      <p>我更想做的是“真的把事情做成”，而不是停在概念、截图或半成品层面。</p>
       <div class="hero-actions" style="justify-content:center;">
-        <a class="btn btn-primary magnetic" href="mailto:625681352@qq.com">邮件联系我</a>
-        <a class="btn btn-secondary magnetic" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">GitHub</a>
+        <a class="btn btn-primary" href="mailto:625681352@qq.com">邮件联系我</a>
+        <a class="btn btn-secondary" href="https://github.com/ltj199626" target="_blank" rel="noreferrer">GitHub</a>
       </div>
     </section>
 
@@ -800,36 +326,29 @@
 
   <script>
     const progress = document.getElementById('progress');
-    const cursorGlow = document.getElementById('cursorGlow');
     const revealEls = document.querySelectorAll('.reveal');
-    const tiltEls = document.querySelectorAll('[data-tilt]');
-    const magneticEls = document.querySelectorAll('.magnetic');
-
     document.getElementById('year').textContent = new Date().getFullYear();
 
     const setProgress = () => {
-      const scrollTop = window.scrollY;
-      const height = document.documentElement.scrollHeight - window.innerHeight;
-      const ratio = height <= 0 ? 0 : scrollTop / height;
-      progress.style.width = `${ratio * 100}%`;
+      const top = window.scrollY;
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      progress.style.width = `${h <= 0 ? 0 : (top / h) * 100}%`;
     };
 
-    let ticking = false;
-    const onScroll = () => {
-      if (!ticking) {
+    let raf = false;
+    window.addEventListener('scroll', () => {
+      if (!raf) {
         requestAnimationFrame(() => {
           setProgress();
-          ticking = false;
+          raf = false;
         });
-        ticking = true;
+        raf = true;
       }
-    };
-
+    }, { passive: true });
     setProgress();
-    window.addEventListener('scroll', onScroll, { passive: true });
 
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
+      entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('visible');
           observer.unobserve(entry.target);
@@ -838,38 +357,6 @@
     }, { threshold: 0.12 });
 
     revealEls.forEach(el => observer.observe(el));
-
-    if (window.matchMedia('(pointer:fine)').matches) {
-      window.addEventListener('pointermove', (e) => {
-        cursorGlow.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
-      }, { passive: true });
-
-      tiltEls.forEach((card) => {
-        card.addEventListener('pointermove', (e) => {
-          const rect = card.getBoundingClientRect();
-          const px = (e.clientX - rect.left) / rect.width;
-          const py = (e.clientY - rect.top) / rect.height;
-          const rotateY = (px - 0.5) * 8;
-          const rotateX = (0.5 - py) * 8;
-          card.style.transform = `perspective(1200px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translate3d(0,-6px,0)`;
-        });
-        card.addEventListener('pointerleave', () => {
-          card.style.transform = '';
-        });
-      });
-
-      magneticEls.forEach((el) => {
-        el.addEventListener('pointermove', (e) => {
-          const rect = el.getBoundingClientRect();
-          const x = e.clientX - rect.left - rect.width / 2;
-          const y = e.clientY - rect.top - rect.height / 2;
-          el.style.transform = `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
-        });
-        el.addEventListener('pointerleave', () => {
-          el.style.transform = '';
-        });
-      });
-    }
   </script>
 </body>
 </html>
