@@ -8,7 +8,7 @@ export default {
       h('section', { class: 'page-hero fade-up visible' }, [
         h('div', { class: 'eyebrow' }, 'AI Guides'),
         h('h1', 'AI 使用教程'),
-        h('p', '相比工具名，更能加分的是你如何把 AI 变成可复用能力，所以这一栏刻意强调方法论和落地路径。')
+        h('p', '相比工具名，真正能拉开差距的是你如何把 AI 变成稳定、可复用、可验证的能力，所以这里强调方法论和落地路径。')
       ]),
       h('div', { class: 'grid-3' }, aiGuides.map((guide) => h('div', { class: 'section fade-up visible lift', key: guide.title }, [
         h('h3', guide.title),

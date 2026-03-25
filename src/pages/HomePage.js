@@ -9,11 +9,11 @@ export default {
       h('section', { class: 'hero' }, [
         h('div', { class: 'hero-main fade-up visible' }, [
           h('div', { class: 'hero-badge' }, 'Apple-inspired portfolio · Frontend × AI × Shipping'),
-          h('h1', { class: 'hero-title', innerHTML: '把 <span class="accent">作品体验</span> 做得更清楚，把 <span class="accent">技术能力</span> 展示得更克制。' }),
-          h('p', { class: 'hero-desc' }, '这是一个更接近 Apple 官网表达方式的个人站：大标题、浅色留白、清晰层级，以及真正可以落地上线的项目与内容。'),
+          h('h1', { class: 'hero-title', innerHTML: '为界面带来 <span class="accent">更好的感觉</span>，为产品带来 <span class="accent">真正的完成度</span>。' }),
+          h('p', { class: 'hero-desc' }, '我做前端体验、AI 应用与自动化流程，也关心它们最后是否真的能上线、能被使用、能留下专业而清晰的第一印象。'),
           h('div', { class: 'actions' }, [
             h(RouterLink, { to: '/projects', class: 'btn btn-primary' }, { default: () => '查看项目' }),
-            h(RouterLink, { to: '/blog', class: 'btn btn-secondary' }, { default: () => '浏览博客' }),
+            h(RouterLink, { to: '/about', class: 'btn btn-secondary' }, { default: () => '了解我' }),
           ]),
           h('div', { class: 'stats' }, heroStats.map((item) => h('div', { class: 'stat', key: item.title }, [
             h('strong', item.title),
@@ -22,21 +22,21 @@ export default {
         ]),
         h('div', { class: 'hero-side' }, [
           h('div', { class: 'hero-side-card fade-up visible lift' }, [
-            h('h3', '核心关键词'),
-            h('p', '聚焦前端体验、AI 工具整合、自动化能力和完整交付，而不是堆叠技术名词。'),
-            h('div', { class: 'chips' }, ['前端开发', 'AI 集成', '自动化流程', '产品交付', '工程表达', '独立项目'].map((text) => h('span', { class: 'chip', key: text }, text)))
+            h('h3', '我在做什么'),
+            h('p', '把前端表达、AI 集成、自动化流程和最终交付放进同一套产品视角里，而不是把它们拆成彼此割裂的技能点。'),
+            h('div', { class: 'chips' }, ['前端体验', 'AI 集成', '自动化流程', '产品交付', '工程表达', '独立项目'].map((text) => h('span', { class: 'chip', key: text }, text)))
           ]),
           h('div', { class: 'hero-side-card fade-up visible lift' }, [
-            h('h3', '这个站的目标'),
-            h('p', '让人一眼看懂我擅长什么、做过什么，以及为什么这些能力可以直接转化成真实产品结果。')
+            h('h3', '这个站想表达什么'),
+            h('p', '不是单纯列出我会什么，而是让人快速感受到：我能把一个想法做成完成度高、体验清楚、可以发布的数字产品。')
           ])
         ])
       ]),
       h('section', { class: 'section-block' }, [
         h('div', { class: 'section-head fade-up visible' }, [
           h('div', { class: 'eyebrow' }, 'Selected work'),
-          h('h2', '用更简洁的页面，突出真正重要的内容'),
-          h('p', '首页重点呈现代表项目与内容入口，内页统一成同一套浅色、克制、留白充足的 Apple 风格。')
+          h('h2', '用更克制的页面，把重点留给真正重要的内容'),
+          h('p', '项目不是为了罗列技术栈，而是为了展示一个人如何把视觉表达、实现能力与最终交付串成闭环。')
         ]),
         h('div', { class: 'grid-3' }, projects.map((item) => h('div', { class: 'card fade-up visible lift', key: item.title }, [
           h('h3', item.title),
@@ -47,8 +47,8 @@ export default {
       h('section', { class: 'section-block' }, [
         h('div', { class: 'section-head fade-up visible' }, [
           h('div', { class: 'eyebrow' }, 'Latest writing'),
-          h('h2', '内容不只是在补充，而是作品的一部分'),
-          h('p', '博客、AI 教程与自动化实践一起构成这个站的表达方式：不仅展示页面，也展示思考与交付路径。')
+          h('h2', '内容不是补充说明，而是作品本身的一部分'),
+          h('p', '博客、AI 教程与自动化实践一起构成这个站的表达方式：不仅展示页面，也展示判断、方法和落地路径。')
         ]),
         h('div', { class: 'article-grid' }, blogPosts.slice(0, 3).map((article) => h('div', { class: 'article-card fade-up visible lift', key: article.title }, [
           h('div', { class: 'article-meta' }, article.category),
@@ -57,10 +57,10 @@ export default {
         ])))
       ]),
       h('div', { class: 'cta fade-up visible' }, [
-        h('h2', '不是把页面做得更花，而是把价值表达得更准。'),
-        h('p', '如果你在看一个前端 / AI 开发者是否具备真正的产品交付能力，这个站想回答的是完整度、品味和落地能力。'),
+        h('h2', '好的页面不只是好看，而是让价值更容易被看见。'),
+        h('p', '如果你在看一个前端 / AI 开发者是否具备真正的产品交付能力，这个站想回答的是：完成度、品味、结构和最终落地。'),
         h('div', { class: 'actions', style: 'justify-content:center;' }, [
-          h(RouterLink, { to: '/about', class: 'btn btn-primary' }, { default: () => '了解更多' }),
+          h(RouterLink, { to: '/blog', class: 'btn btn-primary' }, { default: () => '浏览内容' }),
           h(RouterLink, { to: '/ai-guides', class: 'btn btn-secondary' }, { default: () => '查看 AI 教程' }),
         ])
       ])

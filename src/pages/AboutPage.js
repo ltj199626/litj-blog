@@ -7,12 +7,12 @@ export default {
       h('section', { class: 'page-hero fade-up visible' }, [
         h('div', { class: 'eyebrow' }, 'About'),
         h('h1', '关于 / 联系'),
-        h('p', '如果你希望找到一个既能做前端体验，又能把 AI 接进真实流程的人，这里就是我想呈现出来的组合型能力。')
+        h('p', '如果你希望找到一个既能做前端体验，又能把 AI 接进真实流程的人，这里就是我想呈现出来的那种组合型能力。')
       ]),
       h('div', { class: 'grid-2' }, [
         h('div', { class: 'section fade-up visible lift' }, [
           h('h3', '我想做的事'),
-          h('p', '我更偏好那些兼具视觉表达、技术实现、工具整合和真实部署的项目。对我来说，作品不该只停在截图和概念，而应该跑起来、发出去、能被使用。')
+          h('p', '我偏好那些兼具视觉表达、技术实现、工具整合和真实部署的项目。对我来说，作品不该只停在截图和概念，而应该跑起来、发出去、被真正使用。')
         ]),
         h('div', { class: 'section fade-up visible lift' }, [
           h('h3', '联系方式'),
