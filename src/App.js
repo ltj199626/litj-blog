@@ -28,12 +28,10 @@ export default {
     })
     return () => h('div', [
       h('div', { class: 'progress', style: { width: `${progress.value}%` } }),
-      h('div', { class: 'ambient' }),
-      h('div', { class: 'ambient-2' }),
       h('div', { class: 'shell' }, [
         h('nav', { class: 'nav glass fade-up visible' }, [
           h('div', { class: 'nav-inner' }, [
-            h(RouterLink, { to: '/', class: 'brand' }, { default: () => [h('div', { class: 'brand-mark' }, 'L'), h('div', 'Litj / Vue 3 Portfolio')] }),
+            h(RouterLink, { to: '/', class: 'brand' }, { default: () => [h('div', { class: 'brand-mark' }, 'L'), h('div', 'Litj')] }),
             h('div', { class: 'nav-links' }, [
               h(RouterLink, { to: '/', class: 'nav-link' }, { default: () => '首页' }),
               h(RouterLink, { to: '/projects', class: 'nav-link' }, { default: () => '项目' }),
@@ -46,7 +44,7 @@ export default {
         ])
       ]),
       h(RouterView),
-      h('div', { class: 'shell' }, [h('footer', `© ${new Date().getFullYear()} Litj · Vue 3 Portfolio · Built for interview impact and real deployment.`)])
+      h('div', { class: 'shell' }, [h('footer', `© ${new Date().getFullYear()} Litj · Apple-inspired portfolio experience.`)])
     ])
   }
 }
